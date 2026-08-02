@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)https://demand-subscriptions-disk-hobby.trycloudflare.com/index.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧒 大米工作台</title>
+<style>
+/* ===== 全局重置与基础 ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-main: #FFFBF5;
+  --nav-bg: #FFF4E6;
+  --nav-active: #FFE0B2;
+  --text-dark: #4A3728;
+  --text-mid: #8B7355;
+  --text-light: #BFA88A;
+  --white: #FFFFFF;
+  --shadow: 0 4px 16px rgba(180,140,80,0.12);
+  --shadow-hover: 0 8px 24px rgba(180,140,80,0.18);
+  --radius: 16px;
+  --radius-sm: 10px;
+  /* 模块配色 */
+  --c-shizi: #FFB5C5;   --c-shizi-light: #FFF0F5;
+  --c-gushi: #8FD0A8;   --c-gushi-light: #F0F9F3;
+  --c-shuxue: #8FB8F0;  --c-shuxue-light: #F0F6FF;
+  --c-yingyu: #C8A8E8;  --c-yingyu-light: #F6F0FC;
+  --c-jianfei: #FFB088; --c-jianfei-light: #FFF5EE;
+}
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  background: var(--bg-main);
+  color: var(--text-dark);
+  display: flex;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 左侧导航栏 ===== */
+.sidebar {
+  width: 230px;
+  min-width: 230px;
+  background: var(--nav-bg);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  padding: 20px 0;
+  border-right: 2px solid #F0E0C8;
+}
+.sidebar-logo {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 8px 16px 20px;
+  border-bottom: 1px dashed #E0C8A0;
+  margin-bottom: 12px;
+}
+.nav-group-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-mid);
+  padding: 14px 20px 6px;
+  letter-spacing: 1px;
+}
+.nav-sub-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+  padding: 8px 20px 4px 32px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px 9px 36px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-dark);
+  transition: all .2s;
+  border-left: 3px solid transparent;
+  user-select: none;
+}
+.nav-item.level2 { padding-left: 52px; font-size: 13px; }
+.nav-item:hover { background: rgba(255,224,178,0.4); }
+.nav-item.active {
+  background: var(--nav-active);
+  border-left-color: #FF9800;
+  font-weight: 600;
+}
+.nav-item .emoji { font-size: 16px; }
+
+/* ===== 移动端汉堡菜单 ===== */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 52px;
+  background: var(--nav-bg);
+  border-bottom: 2px solid #F0E0C8;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+.mobile-header .m-logo { font-size: 18px; font-weight: 800; }
+.mobile-header .m-hamburger {
+  width: 32px; height: 32px;
+  display: flex; flex-direction: column;
+  justify-content: center; gap: 5px;
+  cursor: pointer;
+}
+.mobile-header .m-hamburger span {
+  display: block; width: 22px; height: 2.5px;
+  background: var(--text-dark);
+  border-radius: 2px;
+  transition: all .25s;
+}
+.mobile-header .m-hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.mobile-header .m-hamburger.open span:nth-child(2) { opacity: 0; }
+.mobile-header .m-hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 90;
+}
+.sidebar-overlay.show { display: block; }
+
+/* ===== 底部快捷导航（手机） ===== */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 56px;
+  background: #fff;
+  border-top: 1px solid #F0E0C8;
+  z-index: 100;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 4px;
+}
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all .15s;
+}
+.bottom-nav-item .bn-emoji { font-size: 20px; }
+.bottom-nav-item.active { color: #FF9800; background: #FFF8E1; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  .mobile-header { display: flex; }
+  .sidebar {
+    position: fixed;
+    left: -260px; top: 0;
+    z-index: 95;
+    transition: left .3s ease;
+    box-shadow: none;
+  }
+  .sidebar.open { left: 0; box-shadow: 4px 0 20px rgba(0,0,0,0.2); }
+  .main {
+    padding: 68px 16px 72px;
+    max-width: 100%;
+  }
+  .page-header h1 { font-size: 20px; }
+  .page-header .icon { font-size: 24px; }
+  .bottom-nav { display: flex; }
+  .hanzi-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+  .hanzi-all-grid { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); }
+  .weight-input-row { flex-direction: column; gap: 10px; }
+  .eng-add-row { flex-wrap: wrap; }
+  .eng-add-row input:first-child { width: 100%; }
+  .eng-add-row input:nth-child(2) { flex: 1; }
+  .math-item { flex-wrap: wrap; gap: 6px; }
+  .math-item .m-name { width: 100%; margin-bottom: 4px; }
+  .ctrl-row { gap: 10px; }
+}
+
+/* ===== 右侧主内容 ===== */
+.main {
+  flex: 1;
+  padding: 32px 40px;
+  max-width: 1000px;
+  overflow-x: hidden;
+}
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.page-header .icon { font-size: 32px; }
+.page-header h1 { font-size: 26px; font-weight: 800; }
+.page-header .subtitle { font-size: 13px; color: var(--text-mid); margin-top: 2px; }
+
+/* ===== 通用卡片 ===== */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+  transition: box-shadow .2s;
+}
+.card:hover { box-shadow: var(--shadow-hover); }
+.section-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ===== 进度条 ===== */
+.progress-bar-wrap {
+  background: #F0E8DC;
+  border-radius: 20px;
+  height: 22px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 20px;
+  transition: width .4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  min-width: 40px;
+}
+
+/* ===== 自定义勾选框 ===== */
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  transition: background .15s;
+  cursor: pointer;
+  user-select: none;
+}
+.check-item:hover { background: #FFF8F0; }
+.check-box {
+  width: 24px; height: 24px;
+  border: 2px solid #D0BFA0;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all .2s;
+  background: #fff;
+}
+.check-item.checked .check-box {
+  background: #4CAF50;
+  border-color: #4CAF50;
+}
+.check-item.checked .check-box::after {
+  content: "✓";
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+}
+.check-item.checked .check-label {
+  color: var(--text-light);
+  text-decoration: line-through;
+}
+.check-label { font-size: 15px; transition: all .2s; }
+
+/* ===== 识字：汉字卡片 ===== */
+.hanzi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px;
+}
+.hanzi-card {
+  background: var(--c-shizi-light);
+  border-radius: var(--radius-sm);
+  padding: 16px 12px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all .2s;
+  position: relative;
+}
+.hanzi-card .hz {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.1;
+}
+.hanzi-card .py {
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-top: 4px;
+}
+.hanzi-card .ci {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 6px;
+}
+.hanzi-card .idx {
+  position: absolute;
+  top: 6px; left: 8px;
+  font-size: 11px;
+  color: var(--text-light);
+}
+.hanzi-card .mini-check {
+  position: absolute;
+  top: 6px; right: 8px;
+  width: 22px; height: 22px;
+  border: 2px solid #E0A0B0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: all .2s;
+}
+.hanzi-card .mini-check.on {
+  background: #4CAF50;
+  border-color: #4CAF50;
+  color: #fff;
+}
+.hanzi-card .mini-check.on::after { content:"✓"; font-size:14px; font-weight:800; }
+.hanzi-card.learned { background: #E8F5E9; border-color: #A5D6A7; }
+.hanzi-card.learning { background: #FFF3E0; border-color: #FFCC80; }
+
+/* 字表网格（全部100字） */
+.hanzi-all-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 8px;
+}
+.hanzi-mini {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+}
+.hanzi-mini.done { background: #C8E6C9; color: #2E7D32; }
+.hanzi-mini.today { background: #FFE0B2; color: #E65100; border: 2px solid #FF9800; }
+.hanzi-mini.todo { background: #F5F0E8; color: #C0B0A0; }
+.hanzi-mini:hover { transform: scale(1.08); }
+.hanzi-mini .num { font-size: 9px; font-weight: 400; opacity: .6; }
+
+/* ===== 古诗卡片 ===== */
+.poem-card {
+  background: var(--c-gushi-light);
+  border-left: 4px solid var(--c-gushi);
+}
+.poem-card.done { background: #E8F5E9; border-left-color: #4CAF50; }
+.poem-title {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.poem-author { font-size: 13px; color: var(--text-mid); margin-bottom: 12px; }
+.poem-body { font-size: 16px; line-height: 2; color: var(--text-dark); letter-spacing: 1px; white-space: pre-line; }
+.poem-check-row { margin-top: 14px; padding-top: 12px; border-top: 1px dashed #C0D8C8; }
+
+/* ===== 数学模块 ===== */
+.math-cat {
+  background: var(--c-shuxue-light);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+.math-cat-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1565C0;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.math-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fff;
+  margin-bottom: 6px;
+}
+.math-item .m-name { flex: 1; font-size: 14px; }
+.math-item .m-check {
+  width: 22px; height: 22px;
+  border: 2px solid #90A4F0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.math-item .m-check.on { background: #4CAF50; border-color: #4CAF50; color: #fff; }
+.math-item .m-check.on::after { content:"✓"; font-size:13px; font-weight:800; }
+.math-item .m-time {
+  width: 70px;
+  padding: 4px 8px;
+  border: 1px solid #D0D8F0;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
+  background: #fff;
+}
+.math-item .m-time-label { font-size: 12px; color: var(--text-light); }
+
+/* ===== 英语模块 ===== */
+.english-hero {
+  background: linear-gradient(135deg, #F3E8FF, #EDE0FF);
+  border-radius: 20px;
+  padding: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.english-hero .big-num {
+  font-size: 42px;
+  font-weight: 800;
+  color: #7B1FA2;
+}
+.english-hero .goal-text { font-size: 14px; color: var(--text-mid); margin-top: 4px; }
+.english-progress-ring {
+  width: 120px; height: 120px;
+  margin: 12px auto;
+  position: relative;
+}
+.english-progress-ring svg { transform: rotate(-90deg); }
+.english-progress-ring .ring-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 22px;
+  font-weight: 800;
+  color: #7B1FA2;
+}
+.eng-record-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #FAF5FF;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.eng-record-row .eng-name { flex: 1; font-size: 14px; }
+.eng-record-row .eng-min { width: 60px; text-align: center; font-size: 14px; font-weight: 600; color: #7B1FA2; }
+.eng-record-row .eng-del { cursor: pointer; color: #ccc; font-size: 18px; }
+.eng-record-row .eng-del:hover { color: #e53935; }
+.eng-add-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.eng-add-row input {
+  padding: 8px 12px;
+  border: 1px solid #D0B8E8;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+.eng-add-row input:first-child { flex: 1; }
+.eng-add-row input:nth-child(2) { width: 90px; }
+.eng-add-row button {
+  padding: 8px 16px;
+  background: #9C27B0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.eng-add-row button:hover { background: #7B1FA2; }
+.eng-today-sum {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-top: 8px;
+}
+.eng-today-sum b { color: #7B1FA2; font-size: 18px; }
+
+/* ===== 减肥模块 ===== */
+.weight-input-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.weight-field {
+  flex: 1;
+  min-width: 140px;
+}
+.weight-field label {
+  font-size: 13px;
+  color: var(--text-mid);
+  display: block;
+  margin-bottom: 6px;
+}
+.weight-field input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #FFD0A8;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  background: #fff;
+  color: var(--text-dark);
+}
+.meal-checks {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.meal-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #FFF0E0;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+}
+.meal-check .mc-box {
+  width: 20px; height: 20px;
+  border: 2px solid #FFB088;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.meal-check.on .mc-box { background: #4CAF50; border-color: #4CAF50; color: #fff; }
+.meal-check.on .mc-box::after { content:"✓"; font-size:12px; font-weight:800; }
+#weightChart { width: 100%; height: 240px; }
+.weight-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 12px;
+}
+.weight-history-table th, .weight-history-table td {
+  padding: 8px 10px;
+  text-align: center;
+  border-bottom: 1px solid #F0E0D0;
+}
+.weight-history-table th { color: var(--text-mid); font-weight: 600; background: #FFF5EE; }
+.weight-history-table .meal-dot { font-size: 14px; }
+
+/* ===== 通用按钮 ===== */
+.btn {
+  padding: 9px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all .2s;
+}
+.btn-primary { background: #FF9800; color: #fff; }
+.btn-primary:hover { background: #F57C00; }
+.btn-soft { background: #FFE0B2; color: #E65100; }
+.btn-soft:hover { background: #FFD085; }
+
+/* 控制行 */
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.ctrl-row .slider-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.ctrl-row input[type=range] { width: 100px; accent-color: #FF9800; }
+.ctrl-row .slider-val {
+  font-weight: 800;
+  color: #E65100;
+  font-size: 16px;
+  min-width: 20px;
+}
+.tip-box {
+  background: #FFF8E1;
+  border-left: 3px solid #FFC107;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 16px;
+}
+.empty-hint {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-light);
+  font-size: 14px;
+}
+.history-date-group { margin-bottom: 14px; }
+.history-date-group .h-date {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-mid);
+  margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 移动端顶部栏 ===== -->
+<div class="mobile-header">
+  <div class="m-logo">🧒 大米工作台</div>
+  <div class="m-hamburger" id="mHamburger" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- ===== 遮罩层 ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ===== 左侧导航 ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">🧒 大米工作台</div>
+
+  <div class="nav-group-title">📚 TY小小打工人</div>
+  <div class="nav-sub-title">📝 语文</div>
+  <div class="nav-item level2" data-page="shizi"><span class="emoji">🔤</span> 识字</div>
+  <div class="nav-item level2" data-page="gushi"><span class="emoji">🎋</span> 古诗词</div>
+  <div class="nav-sub-title">🔢 数学</div>
+  <div class="nav-item level2" data-page="shuxue"><span class="emoji">🔢</span> 摩比爱数学</div>
+  <div class="nav-sub-title">🅰️ 英语</div>
+  <div class="nav-item level2" data-page="eng2"><span class="emoji">📘</span> 常规二</div>
+  <div class="nav-item level2" data-page="eng3"><span class="emoji">📗</span> 常规三</div>
+
+  <div class="nav-group-title">🏃 大米冲冲冲</div>
+  <div class="nav-item level2" data-page="jianfei"><span class="emoji">⚖️</span> 减肥</div>
+
+  <div style="margin-top:auto;padding:12px 16px;border-top:1px solid #E8D8B8;display:flex;flex-direction:column;gap:8px;">
+    <button onclick="exportData()" style="padding:10px;border:none;border-radius:10px;background:#FFE0B2;color:#4A3728;font-size:13px;font-weight:600;cursor:pointer;">💾 备份数据（复制保存）</button>
+    <button onclick="importData()" style="padding:10px;border:none;border-radius:10px;background:#C8E6C9;color:#2E7D32;font-size:13px;font-weight:600;cursor:pointer;">📁 恢复数据（粘贴恢复）</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(event)">
+  </div>
+</aside>
+
+<!-- ===== 右侧主内容 ===== -->
+<main class="main" id="mainContent"></main>
+
+<!-- ===== 底部快捷导航（手机） ===== -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bottom-nav-item" data-page="shizi"><span class="bn-emoji">🔤</span><span>识字</span></div>
+  <div class="bottom-nav-item" data-page="gushi"><span class="bn-emoji">🎋</span><span>古诗</span></div>
+  <div class="bottom-nav-item" data-page="shuxue"><span class="bn-emoji">🔢</span><span>数学</span></div>
+  <div class="bottom-nav-item" data-page="eng2"><span class="bn-emoji">📘</span><span>英语</span></div>
+  <div class="bottom-nav-item" data-page="jianfei"><span class="bn-emoji">⚖️</span><span>减肥</span></div>
+</nav>
+
+<script>
+/* ============================================================
+   数据层
+============================================================ */
+
+// 洪恩识字前100字（含拼音和组词）
+const HANZI_100 = [
+  {h:"一",p:"yī",c:"一起"},{h:"二",p:"èr",c:"二月"},{h:"三",p:"sān",c:"三个"},{h:"人",p:"rén",c:"大人"},{h:"个",p:"gè",c:"一个"},
+  {h:"大",p:"dà",c:"大小"},{h:"山",p:"shān",c:"山上"},{h:"上",p:"shàng",c:"上去"},{h:"下",p:"xià",c:"下来"},{h:"小",p:"xiǎo",c:"小鸟"},
+  {h:"雨",p:"yǔ",c:"下雨"},{h:"天",p:"tiān",c:"天空"},{h:"车",p:"chē",c:"汽车"},{h:"开",p:"kāi",c:"开门"},{h:"火",p:"huǒ",c:"火车"},
+  {h:"门",p:"mén",c:"大门"},{h:"口",p:"kǒu",c:"口水"},{h:"月",p:"yuè",c:"月亮"},{h:"羊",p:"yáng",c:"小羊"},{h:"只",p:"zhī",c:"一只"},
+  {h:"有",p:"yǒu",c:"没有"},{h:"牛",p:"niú",c:"小牛"},{h:"水",p:"shuǐ",c:"喝水"},{h:"中",p:"zhōng",c:"中间"},{h:"风",p:"fēng",c:"大风"},
+  {h:"头",p:"tóu",c:"石头"},{h:"田",p:"tián",c:"田地"},{h:"土",p:"tǔ",c:"泥土"},{h:"里",p:"lǐ",c:"里面"},{h:"在",p:"zài",c:"现在"},
+  {h:"日",p:"rì",c:"日出"},{h:"白",p:"bái",c:"白云"},{h:"马",p:"mǎ",c:"小马"},{h:"手",p:"shǒu",c:"小手"},{h:"出",p:"chū",c:"出去"},
+  {h:"王",p:"wáng",c:"大王"},{h:"子",p:"zǐ",c:"孩子"},{h:"儿",p:"ér",c:"儿子"},{h:"女",p:"nǚ",c:"女孩"},{h:"刀",p:"dāo",c:"小刀"},
+  {h:"木",p:"mù",c:"木马"},{h:"鸟",p:"niǎo",c:"小鸟"},{h:"伞",p:"sǎn",c:"雨伞"},{h:"鱼",p:"yú",c:"小鱼"},{h:"瓜",p:"guā",c:"西瓜"},
+  {h:"气",p:"qì",c:"生气"},{h:"飞",p:"fēi",c:"飞机"},{h:"虫",p:"chóng",c:"虫子"},{h:"米",p:"mǐ",c:"大米"},{h:"云",p:"yún",c:"白云"},
+  {h:"电",p:"diàn",c:"电话"},{h:"石",p:"shí",c:"石头"},{h:"了",p:"le",c:"好了"},{h:"来",p:"lái",c:"过来"},{h:"玉",p:"yù",c:"玉米"},
+  {h:"去",p:"qù",c:"过去"},{h:"回",p:"huí",c:"回来"},{h:"多",p:"duō",c:"多少"},{h:"少",p:"shǎo",c:"多少"},{h:"问",p:"wèn",c:"请问"},
+  {h:"早",p:"zǎo",c:"早上"},{h:"巴",p:"bā",c:"尾巴"},{h:"父",p:"fù",c:"父亲"},{h:"工",p:"gōng",c:"工作"},{h:"力",p:"lì",c:"力气"},
+  {h:"不",p:"bù",c:"不是"},{h:"干",p:"gàn",c:"干净"},{h:"几",p:"jǐ",c:"几个"},{h:"男",p:"nán",c:"男孩"},{h:"坐",p:"zuò",c:"坐下"},
+  {h:"打",p:"dǎ",c:"打扫"},{h:"四",p:"sì",c:"四个"},{h:"五",p:"wǔ",c:"五个"},{h:"六",p:"liù",c:"六个"},{h:"闪",p:"shǎn",c:"闪电"},
+  {h:"的",p:"de",c:"我的"},{h:"花",p:"huā",c:"小花"},{h:"朵",p:"duǒ",c:"花朵"},{h:"果",p:"guǒ",c:"水果"},{h:"比",p:"bǐ",c:"比赛"},
+  {h:"午",p:"wǔ",c:"中午"},{h:"面",p:"miàn",c:"面条"},{h:"高",p:"gāo",c:"高大"},{h:"包",p:"bāo",c:"书包"},{h:"文",p:"wén",c:"语文"},
+  {h:"分",p:"fēn",c:"分开"},{h:"平",p:"píng",c:"平安"},{h:"我",p:"wǒ",c:"我们"},{h:"连",p:"lián",c:"连线"},{h:"元",p:"yuán",c:"一元"},
+  {h:"丁",p:"dīng",c:"园丁"},{h:"厂",p:"chǎng",c:"工厂"},{h:"目",p:"mù",c:"目光"},{h:"见",p:"jiàn",c:"看见"},{h:"兔",p:"tù",c:"兔子"},
+  {h:"禾",p:"hé",c:"禾苗"},{h:"是",p:"shì",c:"是的"},{h:"把",p:"bǎ",c:"把手"},{h:"笑",p:"xiào",c:"笑声"},{h:"着",p:"zhe",c:"看着"}
+];
+
+// 部编版一年级古诗词13首
+const POEMS = [
+  {title:"咏鹅",author:"骆宾王",dynasty:"唐",body:"鹅，鹅，鹅，\n曲项向天歌。\n白毛浮绿水，\n红掌拨清波。",grade:"一上"},
+  {title:"江南",author:"汉乐府",dynasty:"汉",body:"江南可采莲，\n莲叶何田田。\n鱼戏莲叶间。\n鱼戏莲叶东，\n鱼戏莲叶西，\n鱼戏莲叶南，\n鱼戏莲叶北。",grade:"一上"},
+  {title:"画",author:"王维",dynasty:"唐",body:"远看山有色，\n近听水无声。\n春去花还在，\n人来鸟不惊。",grade:"一上"},
+  {title:"悯农（其二）",author:"李绅",dynasty:"唐",body:"锄禾日当午，\n汗滴禾下土。\n谁知盘中餐，\n粒粒皆辛苦。",grade:"一上"},
+  {title:"古朗月行（节选）",author:"李白",dynasty:"唐",body:"小时不识月，\n呼作白玉盘。\n又疑瑶台镜，\n飞在青云端。",grade:"一上"},
+  {title:"风",author:"李峤",dynasty:"唐",body:"解落三秋叶，\n能开二月花。\n过江千尺浪，\n入竹万竿斜。",grade:"一上"},
+  {title:"春晓",author:"孟浩然",dynasty:"唐",body:"春眠不觉晓，\n处处闻啼鸟。\n夜来风雨声，\n花落知多少。",grade:"一下"},
+  {title:"赠汪伦",author:"李白",dynasty:"唐",body:"李白乘舟将欲行，\n忽闻岸上踏歌声。\n桃花潭水深千尺，\n不及汪伦送我情。",grade:"一下"},
+  {title:"静夜思",author:"李白",dynasty:"唐",body:"床前明月光，\n疑是地上霜。\n举头望明月，\n低头思故乡。",grade:"一下"},
+  {title:"寻隐者不遇",author:"贾岛",dynasty:"唐",body:"松下问童子，\n言师采药去。\n只在此山中，\n云深不知处。",grade:"一下"},
+  {title:"池上",author:"白居易",dynasty:"唐",body:"小娃撑小艇，\n偷采白莲回。\n不解藏踪迹，\n浮萍一道开。",grade:"一下"},
+  {title:"小池",author:"杨万里",dynasty:"宋",body:"泉眼无声惜细流，\n树阴照水爱晴柔。\n小荷才露尖尖角，\n早有蜻蜓立上头。",grade:"一下"},
+  {title:"画鸡",author:"唐寅",dynasty:"明",body:"头上红冠不用裁，\n满身雪白走将来。\n平生不敢轻言语，\n一叫千门万户开。",grade:"一下"}
+];
+
+// 摩比爱数学萌芽版 8大类及章节
+const MATH_CATS = [
+  {name:"第1讲 点数",emoji:"🔢",chapters:["点数"]},
+  {name:"第2讲 多方位比较",emoji:"⚖️",chapters:["多方位比较"]},
+  {name:"第3讲 观察力启蒙",emoji:"👀",chapters:["观察力启蒙"]},
+  {name:"第4讲 匹配游戏",emoji:"🔀",chapters:["匹配游戏"]},
+  {name:"第5讲 数物对应",emoji:"🔢",chapters:["数物对应"]},
+  {name:"第6讲 无声——感知立体图形",emoji:"🎲",chapters:["感知立体图形"]},
+  {name:"第7讲 分类启蒙",emoji:"📂",chapters:["分类启蒙"]},
+  {name:"第8讲 图形总动员",emoji:"🔷",chapters:["图形总动员"]},
+  {name:"第9讲 多感官分辨",emoji:"👂",chapters:["多感官分辨"]},
+  {name:"第10讲 生活中的数和量",emoji:"🏠",chapters:["生活中的数和量"]}
+];
+
+/* ===== localStorage 封装 ===== */
+const Store = {
+  get(key, def) {
+    try { const v = localStorage.getItem('dm_'+key); return v ? JSON.parse(v) : def; }
+    catch(e) { return def; }
+  },
+  set(key, val) { localStorage.setItem('dm_'+key, JSON.stringify(val)); }
+};
+
+/* ===== 识字数据 ===== */
+function getShizi() {
+  return Store.get('shizi', {
+    learnedCount: 10,      // 已学字数（前10已学）
+    dailyNew: 3,           // 每天新学几个
+    newChecks: {},         // 今日新学勾选 {汉字: true}
+    reviewChecks: {},      // 复习勾选 {日期_汉字: true}
+    history: []            // [{date, newChars:[]}]
+  });
+}
+function saveShizi(d) { Store.set('shizi', d); }
+
+/* ===== 古诗数据 ===== */
+function getPoems() { return Store.get('poems', { learned: {} }); }
+function savePoems(d) { Store.set('poems', d); }
+
+/* ===== 数学数据 ===== */
+function getMath() { return Store.get('math', { checks: {}, times: {}, custom: [] }); }
+function saveMath(d) { Store.set('math', d); }
+
+/* ===== 英语数据 ===== */
+function getEng(key) {
+  return Store.get('eng_'+key, { goalHours: 70, records: [] });
+}
+function saveEng(key, d) { Store.set('eng_'+key, d); }
+
+/* ===== 减肥数据 ===== */
+function getJianfei() { return Store.get('jianfei', { days: [] }); }
+function saveJianfei(d) { Store.set('jianfei', d); }
+
+/* ===== 工具函数 ===== */
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function fmtDate(s) {
+  const p = s.split('-');
+  return p[1]+'/'+p[2];
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ============================================================
+   路由 & 渲染入口
+============================================================ */
+let currentPage = 'shizi';
+function navigate(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+  // 底部导航栏高亮
+  document.querySelectorAll('.bottom-nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+  render();
+}
+function render() {
+  const main = document.getElementById('mainContent');
+  switch(currentPage) {
+    case 'shizi': main.innerHTML = renderShizi(); afterShizi(); break;
+    case 'gushi': main.innerHTML = renderGushi(); afterGushi(); break;
+    case 'shuxue': main.innerHTML = renderShuxue(); afterShuxue(); break;
+    case 'eng2': main.innerHTML = renderEng('eng2','常规二'); afterEng('eng2'); break;
+    case 'eng3': main.innerHTML = renderEng('eng3','常规三'); afterEng('eng3'); break;
+    case 'jianfei': main.innerHTML = renderJianfei(); afterJianfei(); break;
+  }
+}
+
+/* ============================================================
+   识字模块
+============================================================ */
+function renderShizi() {
+  const d = getShizi();
+  const learned = d.learnedCount;
+  const dailyNew = d.dailyNew;
+  const today = todayStr();
+
+  // 今日要新学的字
+  const todayChars = HANZI_100.slice(learned, learned + dailyNew);
+
+  // ===== 遗忘曲线复习算法 =====
+  // 复习间隔：1天、3天、7天、15天、30天后复习
+  const REVIEW_INTERVALS = [1, 3, 7, 15, 30];
+
+  // 计算每个历史记录距今天多少天
+  function daysAgo(dateStr) {
+    const d = new Date(dateStr);
+    const t = new Date(today);
+    return Math.floor((t - d) / (1000*60*60*24));
+  }
+
+  // 找出今天应该复习的字（精确匹配遗忘曲线间隔）
+  const reviewChars = []; // {char, fromDate, interval, daysAgo}
+  const reviewSet = new Set(); // 去重
+
+  d.history.forEach(entry => {
+    const ago = daysAgo(entry.date);
+    // 检查是否匹配任一复习间隔
+    const matchedInterval = REVIEW_INTERVALS.find(interval => ago === interval);
+    if (matchedInterval !== undefined) {
+      entry.newChars.forEach(h => {
+        if (!reviewSet.has(h)) {
+          reviewSet.add(h);
+          reviewChars.push({
+            char: h,
+            fromDate: entry.date,
+            interval: matchedInterval,
+            daysAgo: ago
+          });
+        }
+      });
+    }
+  });
+
+  // 检查今天是否已经全部复习打勾过
+  const reviewAllChecked = reviewChars.length > 0 && reviewChars.every(rc => d.reviewChecks[today+'_'+rc.char]);
+  // 检查今天是否全部新学打勾过
+  const newAllChecked = todayChars.length > 0 && todayChars.every(c => d.newChecks[c.h]);
+
+  let html = `
+  <div class="page-header">
+    <span class="icon">🔤</span>
+    <div><h1>识字</h1><div class="subtitle">洪恩识字·我的第一本汉字书 · 前100字</div></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">📊 学习进度</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" style="width:${learned}%;background:linear-gradient(90deg,#FF9800,#FFB74D);">${learned}/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:13px;color:var(--text-mid);">已学 <b style="color:#E65100">${learned}</b> 字，还剩 <b>${100-learned}</b> 字</div>
+  </div>
+
+  <div class="ctrl-row">
+    <div class="slider-group">
+      <span>每日新学</span>
+      <input type="range" min="1" max="5" value="${dailyNew}" id="dailyNewSlider" oninput="document.getElementById('dailyNewVal').textContent=this.value">
+      <span class="slider-val" id="dailyNewVal">${dailyNew}</span>
+      <span>个字</span>
+    </div>
+    <button class="btn btn-soft" onclick="updateDailyNew()">应用</button>
+  </div>`;
+
+  // ===== 遗忘曲线复习区 =====
+  if (reviewChars.length > 0) {
+    html += `
+    <div class="card" style="border-top:4px solid #7C4DFF;background:#F8F4FF;">
+      <div class="section-title">🧠 遗忘曲线复习（${reviewChars.length} 个字）</div>
+      <div style="font-size:12px;color:var(--text-mid);margin-bottom:12px;">
+        根据艾宾浩斯遗忘曲线，${reviewAllChecked ? '✅ 今天复习已全部完成！' : '以下字到了该复习的时间点：'}</div>
+      <div class="hanzi-grid">`;
+    reviewChars.forEach(rc => {
+      const c = HANZI_100.find(x => x.h === rc.char);
+      if (!c) return;
+      const rkey = today+'_'+rc.char;
+      const checked = d.reviewChecks[rkey] ? 'on' : '';
+      html += `
+        <div class="hanzi-card" style="background:${checked?'#E8F5E9':'#EDE0FF'};border:2px solid ${checked?'#A5D6A7':'#D1C4E9'};">
+          <span class="idx" style="font-size:10px;color:#7C4DFF;">${rc.daysAgo}天前学</span>
+          <div class="mini-check ${checked}" onclick="toggleReviewCheck('${rc.char}')" style="border-color:#B39DDB;"></div>
+          <div class="hz">${c.h}</div>
+          <div class="py">${c.p}</div>
+          <div class="ci">${c.c}</div>
+        </div>`;
+    });
+    html += `
+      </div>
+      <div class="tip-box" style="background:#F3E8FF;border-left-color:#7C4DFF;">
+        📖 遗忘曲线间隔：学后 <b>1天 / 3天 / 7天 / 15天 / 30天</b> 各复习一次。会读会认的打勾，不会的明天继续复习。
+      </div>
+    </div>`;
+  } else if (d.history.length > 0) {
+    html += `
+    <div class="card" style="border-top:4px solid #7C4DFF;background:#F8F4FF;text-align:center;padding:24px;">
+      <div style="font-size:32px;">😌</div>
+      <div style="font-size:14px;color:var(--text-mid);margin-top:8px;">今天没有需要复习的字，太棒了！</div>
+    </div>`;
+  }
+
+  // ===== 今日新学区 =====
+  html += `
+  <div class="card" style="border-top:4px solid #FF9800;">
+    <div class="section-title">✨ 今日新学（第 ${learned+1} ~ ${Math.min(learned+dailyNew,100)} 字）</div>
+    <div class="hanzi-grid">`;
+  todayChars.forEach((c, i) => {
+    const checked = d.newChecks[c.h] ? 'on' : '';
+    html += `
+      <div class="hanzi-card learning">
+        <span class="idx">${learned+i+1}</span>
+        <div class="mini-check ${checked}" onclick="toggleNewCheck('${c.h}')"></div>
+        <div class="hz">${c.h}</div>
+        <div class="py">${c.p}</div>
+        <div class="ci">${c.c}</div>
+      </div>`;
+  });
+  html += `
+    </div>
+    <div class="tip-box">💡 新学的字认读后，右上角打勾"已学会"。全部打勾后点击下方按钮推进到下一天。</div>
+    <div style="text-align:center;margin-top:14px;">
+      <button class="btn btn-primary" onclick="advanceDay()">✅ 完成今日，推进到下一天</button>
+    </div>
+  </div>`;
+
+  // 全部100字网格
+  html += `
+  <div class="card">
+    <div class="section-title">🗂️ 全部100字总览</div>
+    <div style="display:flex;gap:16px;margin-bottom:12px;font-size:12px;color:var(--text-mid);">
+      <span>🟢 已学</span> <span>🟠 今日</span> <span>⚪ 未学</span>
+    </div>
+    <div class="hanzi-all-grid">`;
+  HANZI_100.forEach((c, i) => {
+    let cls = 'todo';
+    if (i < learned) cls = 'done';
+    else if (i < learned + dailyNew) cls = 'today';
+    html += `<div class="hanzi-mini ${cls}" title="${c.h} ${c.p} ${c.c}"><span>${c.h}</span><span class="num">${i+1}</span></div>`;
+  });
+  html += `</div></div>`;
+
+  return html;
+}
+
+function afterShizi() {}
+function toggleNewCheck(h) {
+  const d = getShizi();
+  d.newChecks[h] = !d.newChecks[h];
+  if (!d.newChecks[h]) delete d.newChecks[h];
+  saveShizi(d); render();
+}
+function toggleReviewCheck(h) {
+  const d = getShizi();
+  const rkey = todayStr()+'_'+h;
+  d.reviewChecks[rkey] = !d.reviewChecks[rkey];
+  if (!d.reviewChecks[rkey]) delete d.reviewChecks[rkey];
+  saveShizi(d); render();
+}
+function updateDailyNew() {
+  const d = getShizi();
+  d.dailyNew = parseInt(document.getElementById('dailyNewSlider').value);
+  saveShizi(d); render();
+}
+function advanceDay() {
+  const d = getShizi();
+  const learned = d.learnedCount;
+  const todayChars = HANZI_100.slice(learned, learned + d.dailyNew).map(c=>c.h);
+
+  // 找出已打勾（已学会）的字
+  const checkedChars = todayChars.filter(h => d.newChecks[h]);
+  // 找出没打勾（还没学会）的字
+  const uncheckedChars = todayChars.filter(h => !d.newChecks[h]);
+
+  // 只有打勾的字才算学会，推进到历史记录
+  if (checkedChars.length > 0) {
+    d.history.push({ date: todayStr(), newChars: checkedChars });
+  }
+
+  // 没打勾的字：不推进，明天还是这些字（learnedCount 不变）
+  // 同时保留没打勾字的勾选状态，明天继续
+  const keepChecks = {};
+  uncheckedChars.forEach(h => { keepChecks[h] = false; });
+
+  // 如果全部没打勾：提示用户
+  if (checkedChars.length === 0) {
+    alert('今天还没有打勾任何字哦！\n\n打勾的字代表已经学会，没打勾的字明天继续学。');
+    return;
+  }
+
+  // 已学会的字推进 learnedCount
+  d.learnedCount = learned + checkedChars.length;
+  d.newChecks = keepChecks; // 只保留没学会的字的勾选状态（都是false）
+  saveShizi(d);
+
+  const msg = uncheckedChars.length > 0
+    ? `✅ ${checkedChars.length} 个字已学会并推进！\n📝 ${uncheckedChars.length} 个字还没学会，明天继续学。`
+    : `✅ ${checkedChars.length} 个字全部学会，已推进！`;
+  alert(msg);
+  render();
+}
+
+/* ============================================================
+   古诗词模块
+============================================================ */
+function renderGushi() {
+  const d = getPoems();
+  const learnedCount = Object.values(d.learned).filter(Boolean).length;
+
+  let html = `
+  <div class="page-header">
+    <span class="icon">🎋</span>
+    <div><h1>古诗词</h1><div class="subtitle">部编版一年级语文 · 杭州萧山区 · 共13首</div></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">📊 学习进度</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" style="width:${learnedCount/13*100}%;background:linear-gradient(90deg,#66BB6A,#81C784);">${learnedCount}/13</div>
+    </div>
+  </div>
+
+  <div class="tip-box">📖 未学的在前面，已学会的自动排到后面。学会一首就打勾～</div>
+  `;
+
+  // 排序：未学的在前，已学会的在后
+  const sorted = [...POEMS];
+  sorted.sort((a, b) => {
+    const aLearned = d.learned[a.title] ? 1 : 0;
+    const bLearned = d.learned[b.title] ? 1 : 0;
+    return aLearned - bLearned;
+  });
+
+  sorted.forEach((p, i) => {
+    const isLearned = d.learned[p.title];
+    html += `
+    <div class="card poem-card ${isLearned?'done':''}">
+      <div class="poem-title">
+        <span>${i+1}. ${p.title} <span style="font-size:12px;color:var(--text-light);font-weight:400;">[${p.grade}]</span></span>
+      </div>
+      <div class="poem-author">${p.author} · ${p.dynasty}</div>
+      <div class="poem-body">${p.body}</div>
+      <div class="poem-check-row">
+        <div class="check-item ${isLearned?'checked':''}" onclick="togglePoem('${p.title}')">
+          <div class="check-box"></div>
+          <span class="check-label">${isLearned?'✓ 已学会':'已学会这首诗'}</span>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  return html;
+}
+function afterGushi() {}
+function togglePoem(title) {
+  const d = getPoems();
+  d.learned[title] = !d.learned[title];
+  savePoems(d); render();
+}
+
+/* ============================================================
+   数学模块
+============================================================ */
+function renderShuxue() {
+  const d = getMath();
+  // 统计今日学习时长
+  const today = todayStr();
+  let todayMin = 0;
+  Object.entries(d.times).forEach(([k,v]) => {
+    if (k.startsWith(today+'_') && v) todayMin += parseInt(v)||0;
+  });
+
+  let html = `
+  <div class="page-header">
+    <span class="icon">🔢</span>
+    <div><h1>摩比爱数学</h1><div class="subtitle">萌芽版 · 第一册 · 学习打卡</div></div>
+  </div>
+
+  <div class="card" style="border-top:4px solid #42A5F5;">
+    <div class="section-title">⏱️ 今日学习</div>
+    <div style="font-size:28px;font-weight:800;color:#1565C0;">${todayMin} <span style="font-size:16px;font-weight:400;">分钟</span></div>
+  </div>
+
+  <div class="tip-box">📝 每学完一节，勾选"已学"并填写学习分钟数。时长自动汇总到今日。</div>
+  `;
+
+  MATH_CATS.forEach((cat, ci) => {
+    let catHtml = `<div class="math-cat">
+      <div class="math-cat-title">${cat.emoji} ${ci+1}. ${cat.name}</div>`;
+    cat.chapters.forEach(ch => {
+      const key = ci+'_'+ch;
+      const checked = d.checks[key] ? 'on' : '';
+      const tKey = today+'_'+key;
+      const tVal = d.times[tKey] || '';
+      catHtml += `
+        <div class="math-item">
+          <div class="m-check ${checked}" onclick="toggleMathCheck('${key}')"></div>
+          <span class="m-name">${ch}</span>
+          <span class="m-time-label">时长</span>
+          <input class="m-time" type="number" min="0" max="180" placeholder="0" value="${tVal}" oninput="setMathTime('${key}',this.value)">
+          <span class="m-time-label">分</span>
+        </div>`;
+    });
+    catHtml += `</div>`;
+    html += catHtml;
+  });
+
+  return html;
+}
+function afterShuxue() {}
+function toggleMathCheck(key) {
+  const d = getMath();
+  d.checks[key] = !d.checks[key];
+  if (!d.checks[key]) delete d.checks[key];
+  saveMath(d); render();
+}
+function setMathTime(key, val) {
+  const d = getMath();
+  const tKey = todayStr()+'_'+key;
+  if (val) d.times[tKey] = val;
+  else delete d.times[tKey];
+  saveMath(d);
+  // 只更新今日汇总，不整体render避免输入失焦
+  // 简单做法：更新顶部数字
+  let todayMin = 0;
+  Object.entries(d.times).forEach(([k,v]) => {
+    if (k.startsWith(todayStr()+'_') && v) todayMin += parseInt(v)||0;
+  });
+  const heroNum = document.querySelector('.card[style*="42A5F5"] div[style*="28px"]');
+  if (heroNum) heroNum.innerHTML = todayMin + ' <span style="font-size:16px;font-weight:400;">分钟</span>';
+}
+
+/* ============================================================
+   英语模块
+============================================================ */
+// 英语常规二 / 常规三 固定书名列表
+const ENG_BOOKS = [
+  "牛津树1", "W-play", "词汇妙趣国", "SuperhammyC",
+  "培生幼儿预备级2", "Wow english4-5", "Muzzy 7-12", "亲子共读（其它）"
+];
+
+function renderEng(key, title) {
+  const d = getEng(key);
+  const totalMin = d.records.reduce((s,r) => s + r.items.reduce((ss,it)=>ss+it.minutes,0), 0);
+  const totalH = (totalMin/60).toFixed(1);
+  const goal = d.goalHours;
+  const pct = Math.min(100, totalH/goal*100);
+
+  const today = todayStr();
+  const todayRec = d.records.find(r => r.date === today);
+  const todayMin = todayRec ? todayRec.items.reduce((s,it)=>s+it.minutes,0) : 0;
+
+  // 构建今日已填的分钟数映射
+  const todayMap = {};
+  if (todayRec) todayRec.items.forEach(it => { todayMap[it.name] = it.minutes; });
+
+  let html = `
+  <div class="page-header">
+    <span class="icon">${key==='eng2'?'📘':'📗'}</span>
+    <div><h1>英语 · ${title}</h1><div class="subtitle">庆爸常规路线 · ihour 模式</div></div>
+  </div>
+
+  <div class="english-hero">
+    <div class="big-num">${totalH} / ${goal} h</div>
+    <div class="goal-text">累计输入时长 / 目标时长</div>
+    <div class="english-progress-ring">
+      <svg width="120" height="120">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#EDE0FF" stroke-width="10"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#9C27B0" stroke-width="10"
+          stroke-dasharray="${2*Math.PI*50}" stroke-dashoffset="${2*Math.PI*50*(1-pct/100)}" stroke-linecap="round"/>
+      </svg>
+      <div class="ring-text">${pct.toFixed(0)}%</div>
+    </div>
+    <div style="font-size:14px;color:var(--text-mid);">今日已学 <b style="color:#7B1FA2;font-size:18px;">${todayMin}</b> 分钟</div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">📝 今日记录 · 共 <b style="color:#7B1FA2;">${todayMin}</b> 分钟</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">`;
+
+  ENG_BOOKS.forEach((book, i) => {
+    const val = todayMap[book] || '';
+    html += `
+      <div class="eng-book-row" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#FAF5FF;border-radius:10px;">
+        <span style="font-size:15px;font-weight:600;min-width:140px;flex-shrink:0;">📖 ${esc(book)}</span>
+        <input type="number" class="eng-book-min" data-key="${key}" data-book="${esc(book)}"
+          min="0" max="600" placeholder="分钟" value="${val}"
+          style="width:80px;padding:6px 10px;border:1px solid #D0B8E8;border-radius:8px;font-size:14px;text-align:center;background:#fff;"
+          oninput="setEngBookTime('${key}','${esc(book)}',this.value)">
+        <span style="font-size:13px;color:#9C27B0;">分钟</span>
+        ${val ? `<span style="font-size:18px;color:#4CAF50;">✓</span>` : ''}
+      </div>`;
+  });
+
+  html += `
+    </div>
+    <div class="eng-today-sum" style="margin-top:12px;">今日小计：<b>${todayMin}分钟</b></div>
+  </div>`;
+
+  // ===== 累计饼图 (ihour 风格) =====
+  // 统计每本书的累计时长
+  const bookTotals = {};
+  d.records.forEach(r => {
+    r.items.forEach(it => {
+      bookTotals[it.name] = (bookTotals[it.name] || 0) + it.minutes;
+    });
+  });
+  const bookEntries = Object.entries(bookTotals).filter(([_,m]) => m > 0).sort((a,b) => b[1] - a[1]);
+
+  if (bookEntries.length > 0) {
+    const colors = ['#6C5CE7','#FF6B6B','#48DBFB','#FFD93D','#6BCB77','#FC5185','#00D2FF','#FF9F43','#A29BFE','#FD79A8'];
+    const pieTotalMin = bookEntries.reduce((s,[_,m])=>s+m,0);
+    const pieTotalH = (pieTotalMin/60).toFixed(1);
+    const pieTotalHInt = Math.floor(pieTotalMin/60);
+    const pieTotalHDec = Math.round((pieTotalMin%60)/60*10);
+
+    // 计算每个扇区的角度（从12点钟方向顺时针）
+    let currentAngle = -Math.PI/2;
+    const slices = bookEntries.map(([name, min], i) => {
+      const angle = (min / pieTotalMin) * 2 * Math.PI;
+      const start = currentAngle;
+      const end = currentAngle + angle;
+      currentAngle = end;
+      return { name, min, start, end, color: colors[i % colors.length], pct: ((min/pieTotalMin)*100).toFixed(1) };
+    });
+
+    // 甜甜圈饼图 SVG（ihour 风格）
+    const cx = 100, cy = 100, r = 90, innerR = 58;
+    function polar(cx, cy, r, angle) {
+      return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+    }
+
+    let svgPaths = '';
+    slices.forEach((s) => {
+      const [x1, y1] = polar(cx, cy, r, s.start);
+      const [x2, y2] = polar(cx, cy, r, s.end);
+      const [ix1, iy1] = polar(cx, cy, innerR, s.start);
+      const [ix2, iy2] = polar(cx, cy, innerR, s.end);
+      const largeArc = (s.end - s.start) > Math.PI ? 1 : 0;
+      const d = `M ${ix1} ${iy1} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} L ${ix2} ${iy2} A ${innerR} ${innerR} 0 ${largeArc} 0 ${ix1} ${iy1}`;
+      svgPaths += `<path d="${d}" fill="${s.color}" stroke="#fff" stroke-width="2"/>`;
+    });
+
+    // 图例 - 竖排卡片式（ihour 风格）
+    let legendHtml = '';
+    slices.forEach((s) => {
+      const h = (s.min/60).toFixed(1);
+      legendHtml += `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#FAFAFA;border-radius:10px;">
+          <span style="width:12px;height:12px;border-radius:3px;background:${s.color};flex-shrink:0;"></span>
+          <span style="flex:1;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(s.name)}</span>
+          <span style="font-size:14px;font-weight:700;color:var(--text-dark);">${h}h</span>
+          <span style="font-size:12px;color:var(--text-light);min-width:36px;text-align:right;">${s.pct}%</span>
+        </div>`;
+    });
+
+    html += `
+    <div class="card" style="text-align:center;">
+      <div class="section-title">📊 累计投入分布</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+        <!-- 饼图居中 -->
+        <div style="position:relative;width:200px;height:200px;">
+          <svg width="200" height="200" viewBox="0 0 200 200">${svgPaths}</svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+            <div style="font-size:12px;color:var(--text-mid);margin-bottom:4px;">累计</div>
+            <div style="font-size:40px;font-weight:800;color:#6C5CE7;line-height:1;">${pieTotalHInt}<span style="font-size:22px;">.${pieTotalHDec}</span></div>
+            <div style="font-size:12px;color:var(--text-light);margin-top:4px;">小时</div>
+          </div>
+        </div>
+        <!-- 图例竖排 -->
+        <div style="width:100%;display:flex;flex-direction:column;gap:8px;">${legendHtml}</div>
+      </div>
+    </div>`;
+  }
+
+  // 历史记录
+  const hist = d.records.filter(r => r.date !== today).reverse();
+  if (hist.length > 0) {
+    html += `<div class="card"><div class="section-title">📅 历史记录</div>`;
+    hist.forEach(r => {
+      const dayMin = r.items.reduce((s,it)=>s+it.minutes,0);
+      html += `<div class="history-date-group">
+        <div class="h-date">${r.date}（共 ${dayMin} 分钟）</div>`;
+      r.items.forEach(it => {
+        html += `<div class="eng-record-row"><span class="eng-name">📖 ${esc(it.name)}</span><span class="eng-min">${it.minutes}分钟</span></div>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div>`;
+  }
+
+  return html;
+}
+function afterEng(key) {}
+function setEngBookTime(key, book, val) {
+  const d = getEng(key);
+  const today = todayStr();
+  const minutes = parseInt(val) || 0;
+
+  // 找到或创建今天的记录
+  let rec = d.records.find(r => r.date === today);
+  if (!rec) {
+    rec = {date: today, items: []};
+    d.records.push(rec);
+  }
+
+  // 找到或更新该书名的记录
+  const itemIdx = rec.items.findIndex(it => it.name === book);
+  if (minutes > 0) {
+    if (itemIdx >= 0) {
+      rec.items[itemIdx].minutes = minutes;
+    } else {
+      rec.items.push({name: book, minutes});
+    }
+  } else {
+    // 分钟数为0则删除
+    if (itemIdx >= 0) rec.items.splice(itemIdx, 1);
+  }
+
+  // 清理空记录
+  if (rec.items.length === 0) {
+    d.records = d.records.filter(r => r.date !== today);
+  }
+
+  saveEng(key, d);
+
+  // 轻量更新汇总数字
+  const totalMin = d.records.reduce((s,r) => s + r.items.reduce((ss,it)=>ss+it.minutes,0), 0);
+  const totalH = (totalMin/60).toFixed(1);
+  const pct = Math.min(100, totalH/d.goalHours*100);
+  const todayMin = rec && d.records.includes(rec) ? rec.items.reduce((s,it)=>s+it.minutes,0) : 0;
+
+  // 更新DOM中的数字
+  const bigNum = document.querySelector('.big-num');
+  if (bigNum) bigNum.innerHTML = totalH + ' / ' + d.goalHours + ' h';
+  const ringText = document.querySelector('.ring-text');
+  if (ringText) ringText.textContent = pct.toFixed(0) + '%';
+  const ringCircle = document.querySelector('.english-progress-ring circle:nth-child(2)');
+  if (ringCircle) ringCircle.setAttribute('stroke-dashoffset', 2*Math.PI*50*(1-pct/100));
+  const todayEl = document.querySelector('.eng-today-sum b');
+  if (todayEl) todayEl.textContent = todayMin + '分钟';
+  // 更新卡片标题中的分钟数
+  const titleEl = document.querySelector('.section-title b');
+  if (titleEl) titleEl.textContent = todayMin + '';
+  const heroToday = document.querySelector('.english-hero b[style*=\"7B1FA2\"]');
+  if (heroToday) heroToday.textContent = todayMin + '';
+}
+function delEngRecord(key, idx) {
+  const d = getEng(key);
+  const today = todayStr();
+  const rec = d.records.find(r => r.date === today);
+  if (rec) {
+    rec.items.splice(idx, 1);
+    if (rec.items.length === 0) {
+      d.records = d.records.filter(r => r.date !== today);
+    }
+    saveEng(key, d);
+    render();
+  }
+}
+
+/* ============================================================
+   减肥模块
+============================================================ */
+function renderJianfei() {
+  const d = getJianfei();
+  const today = todayStr();
+  const todayEntry = d.days.find(x => x.date === today) || {date:today, morning:'', evening:'', meals:[false,false,false], note:''};
+
+  // 统计
+  const validDays = d.days.filter(x => x.morning || x.evening);
+  const latestWeight = (() => {
+    for (let i = d.days.length-1; i>=0; i--) {
+      if (d.days[i].evening) return parseFloat(d.days[i].evening);
+      if (d.days[i].morning) return parseFloat(d.days[i].morning);
+    }
+    return null;
+  })();
+  const firstWeight = (() => {
+    for (let i = 0; i < d.days.length; i++) {
+      if (d.days[i].morning) return parseFloat(d.days[i].morning);
+    }
+    return null;
+  })();
+  const diff = (latestWeight && firstWeight) ? (latestWeight - firstWeight).toFixed(1) : null;
+
+  let html = `
+  <div class="page-header">
+    <span class="icon">⚖️</span>
+    <div><h1>减肥打卡</h1><div class="subtitle">早晚体重 · 饮食打卡 · 趋势追踪</div></div>
+  </div>
+
+  <div class="card" style="border-top:4px solid #FF7043;">
+    <div class="section-title">📊 概览</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;">
+      <div>最新体重：<b style="font-size:22px;color:#E64A19;">${latestWeight||'—'} <span style="font-size:14px;">kg</span></b></div>
+      <div>累计变化：<b style="font-size:22px;color:${diff && diff<0?'#4CAF50':(diff&&diff>0?'#E53935':'#999')};">${diff?(diff>0?'+':'')+diff:'—'} <span style="font-size:14px;">kg</span></b></div>
+      <div>打卡天数：<b style="font-size:22px;color:#FF9800;">${validDays.length} <span style="font-size:14px;">天</span></b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">📝 今日打卡（${fmtDate(today)}）</div>
+    <div class="weight-input-row">
+      <div class="weight-field">
+        <label>🌅 早晨体重 (kg)</label>
+        <input type="number" step="0.1" id="wMorning" placeholder="如 65.2" value="${esc(todayEntry.morning)}" oninput="autoSaveWeight()">
+      </div>
+      <div class="weight-field">
+        <label>🌙 晚上体重 (kg)</label>
+        <input type="number" step="0.1" id="wEvening" placeholder="如 65.5" value="${esc(todayEntry.evening)}" oninput="autoSaveWeight()">
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--text-mid);margin-bottom:8px;">🍽️ 是否好好吃饭</div>
+    <div class="meal-checks">
+      <div class="meal-check ${todayEntry.meals[0]?'on':''}" onclick="toggleMeal(0)"><div class="mc-box"></div><span>早餐</span></div>
+      <div class="meal-check ${todayEntry.meals[1]?'on':''}" onclick="toggleMeal(1)"><div class="mc-box"></div><span>午餐</span></div>
+      <div class="meal-check ${todayEntry.meals[2]?'on':''}" onclick="toggleMeal(2)"><div class="mc-box"></div><span>晚餐</span></div>
+    </div>
+    <div class="weight-field">
+      <label>📝 备注（选填）</label>
+      <input type="text" id="wNote" placeholder="如：今天散步了30分钟" value="${esc(todayEntry.note||'')}" oninput="autoSaveWeight()" style="width:100%;padding:8px 12px;border:1px solid #FFD0A8;border-radius:8px;font-size:14px;">
+    </div>
+  </div>`;
+
+  // 趋势图
+  if (validDays.length >= 1) {
+    html += `
+    <div class="card">
+      <div class="section-title">📈 体重趋势</div>
+      <canvas id="weightChart"></canvas>
+    </div>`;
+  }
+
+  // 历史记录表
+  if (d.days.length > 0) {
+    html += `
+    <div class="card">
+      <div class="section-title">📅 历史记录</div>
+      <table class="weight-history-table">
+        <thead><tr><th>日期</th><th>早重</th><th>晚重</th><th>早</th><th>午</th><th>晚</th><th>备注</th></tr></thead>
+        <tbody>`;
+    [...d.days].reverse().forEach(x => {
+      html += `<tr>
+        <td>${x.date}</td>
+        <td>${x.morning||'—'}</td>
+        <td>${x.evening||'—'}</td>
+        <td class="meal-dot">${x.meals[0]?'✅':'⬜'}</td>
+        <td class="meal-dot">${x.meals[1]?'✅':'⬜'}</td>
+        <td class="meal-dot">${x.meals[2]?'✅':'⬜'}</td>
+        <td style="font-size:12px;">${esc(x.note||'')}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+
+  return html;
+}
+function afterJianfei() {
+  drawWeightChart();
+}
+function getJianfeiToday() {
+  const d = getJianfei();
+  const today = todayStr();
+  let entry = d.days.find(x => x.date === today);
+  if (!entry) {
+    entry = {date:today, morning:'', evening:'', meals:[false,false,false], note:''};
+    d.days.push(entry);
+    saveJianfei(d);
+  }
+  if (!entry.meals) entry.meals = [false,false,false];
+  return {d, entry};
+}
+function autoSaveWeight() {
+  const {d, entry} = getJianfeiToday();
+  entry.morning = document.getElementById('wMorning').value;
+  entry.evening = document.getElementById('wEvening').value;
+  entry.note = document.getElementById('wNote').value;
+  saveJianfei(d);
+  // 更新概览数字（轻量更新）
+  // 为简单起见，体重变化统计在下次render时更新；这里只存
+}
+function toggleMeal(i) {
+  const {d, entry} = getJianfeiToday();
+  entry.meals[i] = !entry.meals[i];
+  saveJianfei(d);
+  render();
+}
+function drawWeightChart() {
+  const canvas = document.getElementById('weightChart');
+  if (!canvas) return;
+  const d = getJianfei();
+  const days = d.days.filter(x => x.morning || x.evening);
+  if (days.length === 0) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth, H = 240;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.height = H+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const padL = 44, padR = 16, padT = 16, padB = 36;
+  const cw = W - padL - padR, ch = H - padT - padB;
+
+  // 数据点
+  const pts = [];
+  days.forEach(x => {
+    if (x.morning) pts.push({date:x.date, w:parseFloat(x.morning), type:'m'});
+    if (x.evening) pts.push({date:x.date, w:parseFloat(x.evening), type:'e'});
+  });
+  if (pts.length === 0) return;
+
+  const weights = pts.map(p=>p.w);
+  let wMin = Math.min(...weights), wMax = Math.max(...weights);
+  const margin = Math.max(0.5, (wMax-wMin)*0.2);
+  wMin -= margin; wMax += margin;
+  if (wMin === wMax) { wMin -= 1; wMax += 1; }
+
+  const n = pts.length;
+  const xAt = i => padL + (n<=1 ? cw/2 : cw * i/(n-1));
+  const yAt = w => padT + ch * (1 - (w-wMin)/(wMax-wMin));
+
+  // 网格线
+  ctx.strokeStyle = '#F0E8DC'; ctx.lineWidth = 1;
+  ctx.font = '11px sans-serif'; ctx.fillStyle = '#BFA88A'; ctx.textAlign = 'right';
+  for (let g=0; g<=4; g++) {
+    const y = padT + ch * g/4;
+    const wv = wMax - (wMax-wMin)*g/4;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
+    ctx.fillText(wv.toFixed(1), padL-6, y+4);
+  }
+
+  // 折线
+  ctx.strokeStyle = '#FF7043'; ctx.lineWidth = 2.5; ctx.beginPath();
+  pts.forEach((p,i) => {
+    const x = xAt(i), y = yAt(p.w);
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // 数据点
+  pts.forEach((p,i) => {
+    const x = xAt(i), y = yAt(p.w);
+    ctx.beginPath(); ctx.arc(x, y, 4, 0, 2*Math.PI);
+    ctx.fillStyle = p.type==='m' ? '#FF9800' : '#7C4DFF';
+    ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+  });
+
+  // X轴日期标签（最多显示8个）
+  ctx.fillStyle = '#8B7355'; ctx.textAlign = 'center';
+  const step = Math.max(1, Math.ceil(n/8));
+  pts.forEach((p,i) => {
+    if (i % step === 0 || i === n-1) {
+      ctx.fillText(fmtDate(p.date), xAt(i), H-padB+18);
+    }
+  });
+
+  // 图例
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#FF9800'; ctx.beginPath(); ctx.arc(padL, H-8, 4, 0, 2*Math.PI); ctx.fill();
+  ctx.fillStyle = '#8B7355'; ctx.fillText('早晨', padL+8, H-4);
+  ctx.fillStyle = '#7C4DFF'; ctx.beginPath(); ctx.arc(padL+60, H-8, 4, 0, 2*Math.PI); ctx.fill();
+  ctx.fillStyle = '#8B7355'; ctx.fillText('晚上', padL+68, H-4);
+}
+
+/* ============================================================
+   移动端导航
+============================================================ */
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  const hb = document.getElementById('mHamburger');
+  sb.classList.toggle('open');
+  ov.classList.toggle('show');
+  hb.classList.toggle('open');
+}
+
+/* ============================================================
+   数据备份 & 恢复
+============================================================ */
+function exportData() {
+  // 收集所有 dm_ 前缀的 localStorage 数据
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('dm_')) {
+      data[key] = localStorage.getItem(key);
+    }
+  }
+  const dataCount = Object.keys(data).length;
+  if (dataCount === 0) {
+    alert('⚠️ 当前没有可备份的数据。\n\n可能是你还没有填写任何学习记录。');
+    return;
+  }
+  // 转成紧凑的 base64 编码文本，方便复制
+  const jsonStr = JSON.stringify(data);
+  const backupCode = btoa(unescape(encodeURIComponent(jsonStr)));
+  
+  // 同时尝试文件下载
+  try {
+    const blob = new Blob([jsonStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '大米工作台备份_' + todayStr() + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) {}
+  
+  // 弹出备份码窗口，方便复制
+  const w = window.open('', '_blank', 'width=400,height=600');
+  if (w) {
+    w.document.write(`
+      <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>备份数据</title>
+      <style>body{font-family:sans-serif;padding:20px;background:#FFFBF5;}
+      h3{color:#4A3728;}p{color:#8B7355;font-size:14px;}
+      textarea{width:100%;height:300px;font-size:11px;border:2px solid #FFE0B2;border-radius:10px;padding:10px;word-break:break-all;}
+      button{padding:12px 24px;border:none;border-radius:10px;background:#FF9800;color:#fff;font-size:16px;margin:10px 0;cursor:pointer;width:100%;}
+      .tip{background:#FFF8E1;padding:10px;border-radius:8px;font-size:13px;color:#E65100;margin:10px 0;}
+      </style></head><body>
+      <h3>✅ 备份成功（${dataCount} 项数据）</h3>
+      <div class="tip">📌 请长按下方文本框，全选并复制，然后粘贴到微信收藏/备忘录保存。换了新链接后点「恢复数据」粘贴即可。</div>
+      <textarea id="backupCode" readonly onclick="this.select()">${backupCode}</textarea>
+      <button onclick="copyCode()">复制备份码</button>
+      <p>💡 文件也已下载到手机，你也可以通过选择文件恢复。</p>
+      <script>
+      function copyCode(){
+        var t=document.getElementById('backupCode');t.select();
+        try{document.execCommand('copy');alert('已复制！请粘贴到微信收藏或备忘录保存');}
+      catch(e){alert('请长按文本框手动全选复制')}
+      }
+      </script>
+      `);
+    w.document.close();
+  } else {
+    // 弹窗被拦截，用 prompt 代替
+    prompt('请复制以下备份码，保存到微信收藏或备忘录（换了新链接后粘贴到「恢复数据」）：', backupCode);
+  }
+}
+
+function importData() {
+  const code = prompt('请粘贴你的备份码：\n\n（就是你之前备份时复制的那段长文本）', '');
+  if (!code || code.trim() === '') {
+    // 如果用户没有粘贴备份码，尝试文件恢复
+    const useFile = confirm('没有输入备份码。\n\n是否选择备份文件恢复？');
+    if (useFile) {
+      document.getElementById('importFile').click();
+    }
+    return;
+  }
+  try {
+    const jsonStr = decodeURIComponent(escape(atob(code.trim())));
+    const data = JSON.parse(jsonStr);
+    let count = 0;
+    for (const key in data) {
+      if (key.startsWith('dm_')) {
+        localStorage.setItem(key, data[key]);
+        count++;
+      }
+    }
+    if (count === 0) {
+      alert('❌ 备份码无效，没有找到可恢复的数据。');
+      return;
+    }
+    alert('✅ 恢复成功！\n\n已恢复 ' + count + ' 项数据。\n页面将自动刷新...');
+    location.reload();
+  } catch(err) {
+    alert('❌ 恢复失败：备份码格式不正确\n\n请确认复制了完整的备份码，或尝试用文件恢复。');
+  }
+}
+
+function doImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      let count = 0;
+      for (const key in data) {
+        if (key.startsWith('dm_')) {
+          localStorage.setItem(key, data[key]);
+          count++;
+        }
+      }
+      alert('✅ 恢复成功！\n\n已恢复 ' + count + ' 项数据。\n页面将自动刷新...');
+      location.reload();
+    } catch(err) {
+      alert('❌ 恢复失败：文件格式不正确');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+/* ============================================================
+   初始化
+============================================================ */
+document.querySelectorAll('.nav-item').forEach(el =&gt; {
+  el.addEventListener('click', () =&gt; {
+    navigate(el.dataset.page);
+    // 手机端点击后自动收起侧边栏
+    if (window.innerWidth &lt;= 768) toggleSidebar();
+  });
+});
+
+// 底部导航栏点击
+document.querySelectorAll('.bottom-nav-item').forEach(el =&gt; {
+  el.addEventListener('click', () =&gt; navigate(el.dataset.page));
+});
+
+navigate('shizi');
+
+
+
+</body></html>
