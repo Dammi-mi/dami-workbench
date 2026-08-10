@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0068)https://demand-subscriptions-disk-hobby.trycloudflare.com/index.html -->
-<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🧒 大米工作台</title>
 <style>
@@ -663,8 +663,8 @@ body {
   <div class="nav-item level2" data-page="jianfei"><span class="emoji">⚖️</span> 减肥</div>
 
   <div style="margin-top:auto;padding:12px 16px;border-top:1px solid #E8D8B8;display:flex;flex-direction:column;gap:8px;">
-    <button onclick="exportData()" style="padding:10px;border:none;border-radius:10px;background:#FFE0B2;color:#4A3728;font-size:13px;font-weight:600;cursor:pointer;">💾 备份数据（复制保存）</button>
-    <button onclick="importData()" style="padding:10px;border:none;border-radius:10px;background:#C8E6C9;color:#2E7D32;font-size:13px;font-weight:600;cursor:pointer;">📁 恢复数据（粘贴恢复）</button>
+    <button onclick="exportData()" style="padding:10px;border:none;border-radius:10px;background:#FFE0B2;color:#4A3728;font-size:13px;font-weight:600;cursor:pointer;">&#128190; 备份数据（复制保存）</button>
+    <button onclick="importData()" style="padding:10px;border:none;border-radius:10px;background:#C8E6C9;color:#2E7D32;font-size:13px;font-weight:600;cursor:pointer;">&#128193; 恢复数据（粘贴恢复）</button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(event)">
   </div>
 </aside>
@@ -1655,16 +1655,9 @@ function exportData() {
       <h3>✅ 备份成功（${dataCount} 项数据）</h3>
       <div class="tip">📌 请长按下方文本框，全选并复制，然后粘贴到微信收藏/备忘录保存。换了新链接后点「恢复数据」粘贴即可。</div>
       <textarea id="backupCode" readonly onclick="this.select()">${backupCode}</textarea>
-      <button onclick="copyCode()">复制备份码</button>
+      <button onclick="var t=document.getElementById('backupCode');t.select();try{document.execCommand('copy');alert('已复制！请粘贴到微信收藏或备忘录保存');}catch(e){alert('请长按文本框手动全选复制')}">复制备份码</button>
       <p>💡 文件也已下载到手机，你也可以通过选择文件恢复。</p>
-      <script>
-      function copyCode(){
-        var t=document.getElementById('backupCode');t.select();
-        try{document.execCommand('copy');alert('已复制！请粘贴到微信收藏或备忘录保存');}
-      catch(e){alert('请长按文本框手动全选复制')}
-      }
-      </script>
-      `);
+      </body></html>`);
     w.document.close();
   } else {
     // 弹窗被拦截，用 prompt 代替
@@ -1730,21 +1723,20 @@ function doImport(event) {
 /* ============================================================
    初始化
 ============================================================ */
-document.querySelectorAll('.nav-item').forEach(el =&gt; {
-  el.addEventListener('click', () =&gt; {
+document.querySelectorAll('.nav-item').forEach(el => {
+  el.addEventListener('click', () => {
     navigate(el.dataset.page);
     // 手机端点击后自动收起侧边栏
-    if (window.innerWidth &lt;= 768) toggleSidebar();
+    if (window.innerWidth <= 768) toggleSidebar();
   });
 });
 
 // 底部导航栏点击
-document.querySelectorAll('.bottom-nav-item').forEach(el =&gt; {
-  el.addEventListener('click', () =&gt; navigate(el.dataset.page));
+document.querySelectorAll('.bottom-nav-item').forEach(el => {
+  el.addEventListener('click', () => navigate(el.dataset.page));
 });
 
 navigate('shizi');
-
-
-
-</body></html>
+</script>
+</body>
+</html>
