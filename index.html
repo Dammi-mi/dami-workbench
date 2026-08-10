@@ -653,8 +653,10 @@ body {
   <div class="nav-sub-title">📝 语文</div>
   <div class="nav-item level2" data-page="shizi"><span class="emoji">🔤</span> 识字</div>
   <div class="nav-item level2" data-page="gushi"><span class="emoji">🎋</span> 古诗词</div>
-  <div class="nav-sub-title">🔢 数学</div>
-  <div class="nav-item level2" data-page="shuxue"><span class="emoji">🔢</span> 摩比爱数学</div>
+  <div class="nav-sub-title">🧩 思维</div>
+  <div class="nav-item level2" data-page="bz1"><span class="emoji">🦁</span> 01 热闹的动物园</div>
+  <div class="nav-item level2" data-page="bz2"><span class="emoji">🌳</span> 02 一起去郊游</div>
+  <div class="nav-item level2" data-page="bz3"><span class="emoji">🛒</span> 03 斑马超市</div>
   <div class="nav-sub-title">🅰️ 英语</div>
   <div class="nav-item level2" data-page="eng2"><span class="emoji">📘</span> 常规二</div>
   <div class="nav-item level2" data-page="eng3"><span class="emoji">📗</span> 常规三</div>
@@ -676,7 +678,7 @@ body {
 <nav class="bottom-nav" id="bottomNav">
   <div class="bottom-nav-item" data-page="shizi"><span class="bn-emoji">🔤</span><span>识字</span></div>
   <div class="bottom-nav-item" data-page="gushi"><span class="bn-emoji">🎋</span><span>古诗</span></div>
-  <div class="bottom-nav-item" data-page="shuxue"><span class="bn-emoji">🔢</span><span>数学</span></div>
+  <div class="bottom-nav-item" data-page="bz1"><span class="bn-emoji">🧩</span><span>思维</span></div>
   <div class="bottom-nav-item" data-page="eng2"><span class="bn-emoji">📘</span><span>英语</span></div>
   <div class="bottom-nav-item" data-page="jianfei"><span class="bn-emoji">⚖️</span><span>减肥</span></div>
 </nav>
@@ -727,19 +729,144 @@ const POEMS = [
   {title:"画鸡",author:"唐寅",dynasty:"明",body:"头上红冠不用裁，\n满身雪白走将来。\n平生不敢轻言语，\n一叫千门万户开。",grade:"一下"}
 ];
 
-// 摩比爱数学萌芽版 8大类及章节
-const MATH_CATS = [
-  {name:"第1讲 点数",emoji:"🔢",chapters:["点数"]},
-  {name:"第2讲 多方位比较",emoji:"⚖️",chapters:["多方位比较"]},
-  {name:"第3讲 观察力启蒙",emoji:"👀",chapters:["观察力启蒙"]},
-  {name:"第4讲 匹配游戏",emoji:"🔀",chapters:["匹配游戏"]},
-  {name:"第5讲 数物对应",emoji:"🔢",chapters:["数物对应"]},
-  {name:"第6讲 无声——感知立体图形",emoji:"🎲",chapters:["感知立体图形"]},
-  {name:"第7讲 分类启蒙",emoji:"📂",chapters:["分类启蒙"]},
-  {name:"第8讲 图形总动员",emoji:"🔷",chapters:["图形总动员"]},
-  {name:"第9讲 多感官分辨",emoji:"👂",chapters:["多感官分辨"]},
-  {name:"第10讲 生活中的数和量",emoji:"🏠",chapters:["生活中的数和量"]}
-];
+// 斑马思维机 题卡主题及小节
+const BZMN_THEMES = {
+  bz1: {
+    title: '01 热闹的动物园', emoji: '🦁',
+    groups: [
+      { group: '视听与记忆', sections: [
+        {id: '01', name: '细节差异'},
+        {id: '02', name: '排除法找相同'},
+        {id: '03', name: '线稿特征'},
+        {id: '04', name: '重叠线稿'}
+      ]},
+      { group: '数感与模型', sections: [
+        {id: '05', name: '按顺序点数'},
+        {id: '06', name: '不同事物的点数'},
+        {id: '07', name: '数量对应'},
+        {id: '08', name: '等量对应'}
+      ]},
+      { group: '图形与空间', sections: [
+        {id: '09', name: '感知方形'},
+        {id: '10', name: '判断图形特征'},
+        {id: '11', name: '上下里外'},
+        {id: '12', name: '前后'}
+      ]},
+      { group: '逻辑与规律', sections: [
+        {id: '13', name: '最大最小'},
+        {id: '14', name: '整体与部分'},
+        {id: '15', name: '关系匹配'},
+        {id: '16', name: '图案匹配'}
+      ]},
+      { group: '实践与规划', sections: [
+        {id: '17', name: '认识白天黑夜'},
+        {id: '18', name: '动作的先后顺序'}
+      ]},
+      { group: '动手与益智', sections: [
+        {id: '19', name: '横向拼图排序'},
+        {id: '20', name: '纵向拼图排序'}
+      ]},
+      { group: '综合提升', sections: [
+        {id: '21', name: '巩固练习'},
+        {id: '22', name: '巩固练习'}
+      ]},
+      { group: 'PK', sections: [
+        {id: '23', name: '双人互动'},
+        {id: '24', name: '双人互动'}
+      ]}
+    ]
+  },
+  bz2: {
+    title: '02 一起去郊游', emoji: '🌳',
+    groups: [
+      { group: '视听与记忆', sections: [
+        {id: '01', name: '排除干扰找相同'},
+        {id: '02', name: '相同组合'},
+        {id: '03', name: '分散线稿'},
+        {id: '04', name: '重叠线稿观察'}
+      ]},
+      { group: '数感与模型', sections: [
+        {id: '05', name: '排除大小干扰点数'},
+        {id: '06', name: '按数量分类'},
+        {id: '07', name: '按物取点'},
+        {id: '08', name: '10以内的唱数'}
+      ]},
+      { group: '图形与空间', sections: [
+        {id: '09', name: '轮廓匹配'},
+        {id: '10', name: '对称的两半'},
+        {id: '11', name: '找对称图案'},
+        {id: '12', name: '圆形事物的切割'}
+      ]},
+      { group: '逻辑与规律', sections: [
+        {id: '13', name: '颜色匹配'},
+        {id: '14', name: '表情匹配'},
+        {id: '15', name: '常见物品归类'},
+        {id: '16', name: 'AB模式'}
+      ]},
+      { group: '实践与规划', sections: [
+        {id: '17', name: '简单事件的先后顺序'},
+        {id: '18', name: '故事的先后顺序'}
+      ]},
+      { group: '动手与益智', sections: [
+        {id: '19', name: '特征拼图'},
+        {id: '20', name: '细节拼图'}
+      ]},
+      { group: '综合提升', sections: [
+        {id: '21', name: '巩固练习'},
+        {id: '22', name: '巩固练习'}
+      ]},
+      { group: 'PK', sections: [
+        {id: '23', name: '双人互动'},
+        {id: '24', name: '双人互动'}
+      ]}
+    ]
+  },
+  bz3: {
+    title: '03 斑马超市', emoji: '🛒',
+    groups: [
+      { group: '视听与记忆', sections: [
+        {id: '01', name: '细节相同'},
+        {id: '02', name: '找指定物品'},
+        {id: '03', name: '重叠线稿找缺少'},
+        {id: '04', name: '简单视觉追踪'}
+      ]},
+      { group: '数感与模型', sections: [
+        {id: '05', name: '生活中的数字'},
+        {id: '06', name: '按物取数'},
+        {id: '07', name: '线性排列比多少'},
+        {id: '08', name: '大小干扰比多少'}
+      ]},
+      { group: '图形与空间', sections: [
+        {id: '09', name: '形状匹配'},
+        {id: '10', name: '辨认简单图形'},
+        {id: '11', name: '感知三角形'},
+        {id: '12', name: '长方形事物的切割'}
+      ]},
+      { group: '逻辑与规律', sections: [
+        {id: '13', name: '区分不同类的事物'},
+        {id: '14', name: '按大小分类'},
+        {id: '15', name: '按长短分类'},
+        {id: '16', name: '简单因果推理'}
+      ]},
+      { group: '实践与规划', sections: [
+        {id: '17', name: '复杂事件的先后顺序'},
+        {id: '18', name: '用点点记录数据'}
+      ]},
+      { group: '动手与益智', sections: [
+        {id: '19', name: '补充直线型路线'},
+        {id: '20', name: '补充弯道型路线'}
+      ]},
+      { group: '综合提升', sections: [
+        {id: '21', name: '巩固练习'},
+        {id: '22', name: '巩固练习'}
+      ]},
+      { group: 'PK', sections: [
+        {id: '23', name: '双人互动'},
+        {id: '24', name: '双人互动'}
+      ]}
+    ]
+  }
+};
 
 /* ===== localStorage 封装 ===== */
 const Store = {
@@ -767,7 +894,7 @@ function getPoems() { return Store.get('poems', { learned: {} }); }
 function savePoems(d) { Store.set('poems', d); }
 
 /* ===== 数学数据 ===== */
-function getMath() { return Store.get('math', { checks: {}, times: {}, custom: [] }); }
+function getMath() { return Store.get('math', { checks: {}, times: {}, counts: {}, custom: [] }); }
 function saveMath(d) { Store.set('math', d); }
 
 /* ===== 英语数据 ===== */
@@ -813,7 +940,9 @@ function render() {
   switch(currentPage) {
     case 'shizi': main.innerHTML = renderShizi(); afterShizi(); break;
     case 'gushi': main.innerHTML = renderGushi(); afterGushi(); break;
-    case 'shuxue': main.innerHTML = renderShuxue(); afterShuxue(); break;
+    case 'bz1': main.innerHTML = renderBanzhima('bz1','01 热闹的动物园'); afterShuxue(); break;
+    case 'bz2': main.innerHTML = renderBanzhima('bz2','02 一起去郊游'); afterShuxue(); break;
+    case 'bz3': main.innerHTML = renderBanzhima('bz3','03 斑马超市'); afterShuxue(); break;
     case 'eng2': main.innerHTML = renderEng('eng2','常规二'); afterEng('eng2'); break;
     case 'eng3': main.innerHTML = renderEng('eng3','常规三'); afterEng('eng3'); break;
     case 'jianfei': main.innerHTML = renderJianfei(); afterJianfei(); break;
@@ -1092,48 +1221,79 @@ function togglePoem(title) {
 /* ============================================================
    数学模块
 ============================================================ */
-function renderShuxue() {
+function renderBanzhima(pageKey, pageTitle) {
   const d = getMath();
-  // 统计今日学习时长
   const today = todayStr();
+  const theme = BZMN_THEMES[pageKey];
+  if (!theme) return '<div class="card">主题不存在</div>';
+
+  // 统计今日时长
   let todayMin = 0;
   Object.entries(d.times).forEach(([k,v]) => {
-    if (k.startsWith(today+'_') && v) todayMin += parseInt(v)||0;
+    if (k.startsWith(today+'_'+pageKey+'_') && v) todayMin += parseInt(v)||0;
   });
+
+  // 统计完成情况
+  let totalSections = 0, doneSections = 0;
+  theme.groups.forEach(g => {
+    g.sections.forEach(sec => {
+      totalSections++;
+      if (d.checks[pageKey+'_'+sec.id]) doneSections++;
+    });
+  });
+
+  // 获取今日总时长（按主题）
+  const todayTimeKey = today+'_'+pageKey+'_total';
+  const todayTime = d.times[todayTimeKey] || 0;
 
   let html = `
   <div class="page-header">
-    <span class="icon">🔢</span>
-    <div><h1>摩比爱数学</h1><div class="subtitle">萌芽版 · 第一册 · 学习打卡</div></div>
+    <span class="icon">${theme.emoji}</span>
+    <div><h1>${theme.title}</h1><div class="subtitle">斑马思维 · 学习打卡</div></div>
   </div>
 
   <div class="card" style="border-top:4px solid #42A5F5;">
-    <div class="section-title">⏱️ 今日学习</div>
-    <div style="font-size:28px;font-weight:800;color:#1565C0;">${todayMin} <span style="font-size:16px;font-weight:400;">分钟</span></div>
+    <div class="section-title">⏱️ 今日学习时长</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+      <input type="number" min="0" max="300" placeholder="0" value="${todayTime}" 
+        oninput="setMathTotalTime('${pageKey}',this.value)"
+        style="width:80px;padding:10px 14px;border:2px solid #42A5F5;border-radius:10px;font-size:24px;font-weight:700;text-align:center;color:#1565C0;">
+      <span style="font-size:16px;color:var(--text-mid);">分钟</span>
+    </div>
+    <div style="margin-top:10px;font-size:13px;color:var(--text-mid);">已完成 <b style="color:#1565C0;">${doneSections}</b> / ${totalSections} 节</div>
   </div>
 
-  <div class="tip-box">📝 每学完一节，勾选"已学"并填写学习分钟数。时长自动汇总到今日。</div>
+  <div class="tip-box">📝 每学完一张题卡，勾选"已学"并点"+"记次数。顶部填写今天总时长即可。</div>
   `;
 
-  MATH_CATS.forEach((cat, ci) => {
-    let catHtml = `<div class="math-cat">
-      <div class="math-cat-title">${cat.emoji} ${ci+1}. ${cat.name}</div>`;
-    cat.chapters.forEach(ch => {
-      const key = ci+'_'+ch;
+  theme.groups.forEach(grp => {
+    // 统计该分组的完成数
+    let grpDone = 0;
+    grp.sections.forEach(sec => {
+      if (d.checks[pageKey+'_'+sec.id]) grpDone++;
+    });
+
+    html += `<div class="card" style="border-top:4px solid #42A5F5;">
+      <div class="section-title">${grp.group}</div>
+      <div style="font-size:12px;color:var(--text-mid);margin-bottom:10px;">
+        已完成 <b style="color:#1565C0;">${grpDone}</b> / ${grp.sections.length} 节
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">`;
+
+    grp.sections.forEach(sec => {
+      const key = pageKey+'_'+sec.id;
       const checked = d.checks[key] ? 'on' : '';
-      const tKey = today+'_'+key;
-      const tVal = d.times[tKey] || '';
-      catHtml += `
-        <div class="math-item">
-          <div class="m-check ${checked}" onclick="toggleMathCheck('${key}')"></div>
-          <span class="m-name">${ch}</span>
-          <span class="m-time-label">时长</span>
-          <input class="m-time" type="number" min="0" max="180" placeholder="0" value="${tVal}" oninput="setMathTime('${key}',this.value)">
-          <span class="m-time-label">分</span>
+      const count = d.counts && d.counts[key] ? d.counts[key] : 0;
+      html += `
+        <div class="math-item" style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:#F0F6FF;border-radius:10px;">
+          <div class="m-check ${checked}" onclick="toggleMathCheck('${key}')" style="flex-shrink:0;"></div>
+          <span style="min-width:32px;font-weight:700;color:#1565C0;font-size:14px;">${sec.id}</span>
+          <span class="m-name" style="flex:1;font-size:14px;">${sec.name}</span>
+          <button onclick="incrementCardCount('${key}')" style="background:#FF9800;color:#fff;border:none;border-radius:8px;padding:4px 10px;font-size:13px;font-weight:700;cursor:pointer;min-width:42px;">${count > 0 ? '×' + count : '+'}</button>
         </div>`;
     });
-    catHtml += `</div>`;
-    html += catHtml;
+
+    html += `</div></div>`;
   });
 
   return html;
@@ -1145,20 +1305,18 @@ function toggleMathCheck(key) {
   if (!d.checks[key]) delete d.checks[key];
   saveMath(d); render();
 }
-function setMathTime(key, val) {
+function incrementCardCount(key) {
   const d = getMath();
-  const tKey = todayStr()+'_'+key;
+  if (!d.counts) d.counts = {};
+  d.counts[key] = (d.counts[key] || 0) + 1;
+  saveMath(d); render();
+}
+function setMathTotalTime(pageKey, val) {
+  const d = getMath();
+  const tKey = todayStr()+'_'+pageKey+'_total';
   if (val) d.times[tKey] = val;
   else delete d.times[tKey];
   saveMath(d);
-  // 只更新今日汇总，不整体render避免输入失焦
-  // 简单做法：更新顶部数字
-  let todayMin = 0;
-  Object.entries(d.times).forEach(([k,v]) => {
-    if (k.startsWith(todayStr()+'_') && v) todayMin += parseInt(v)||0;
-  });
-  const heroNum = document.querySelector('.card[style*="42A5F5"] div[style*="28px"]');
-  if (heroNum) heroNum.innerHTML = todayMin + ' <span style="font-size:16px;font-weight:400;">分钟</span>';
 }
 
 /* ============================================================
@@ -1226,6 +1384,17 @@ function renderEng(key, title) {
   html += `
     </div>
     <div class="eng-today-sum" style="margin-top:12px;">今日小计：<b>${todayMin}分钟</b></div>
+  </div>
+
+  <div class="card" style="border-top:4px solid #9C27B0;">
+    <div class="section-title">📅 补填记录</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <span style="font-size:14px;color:var(--text-mid);">选择日期：</span>
+      <input type="date" id="engBackfillDate_${key}" value="${today}" max="${today}"
+        style="padding:8px 12px;border:2px solid #D0B8E8;border-radius:10px;font-size:14px;background:#fff;">
+      <button onclick="loadBackfillDate('${key}')" style="padding:8px 16px;background:#9C27B0;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">查看</button>
+    </div>
+    <div id="engBackfillArea_${key}"></div>
   </div>`;
 
   // ===== 累计饼图 (ihour 风格) =====
@@ -1322,7 +1491,60 @@ function renderEng(key, title) {
 
   return html;
 }
-function afterEng(key) {}
+function afterEng(key) {
+  // 默认加载今天到补填区域
+  loadBackfillDate(key);
+}
+function loadBackfillDate(key) {
+  var dateInput = document.getElementById('engBackfillDate_'+key);
+  if (!dateInput) return;
+  var date = dateInput.value;
+  var d = getEng(key);
+  var rec = d.records.find(function(r){return r.date === date;});
+  var dayMap = {};
+  if (rec) rec.items.forEach(function(it){dayMap[it.name] = it.minutes;});
+  var dayMin = rec ? rec.items.reduce(function(s,it){return s+it.minutes;},0) : 0;
+
+  var html = '<div style="font-size:13px;color:var(--text-mid);margin-bottom:8px;">' + date + ' 共 <b style="color:#7B1FA2;">' + dayMin + '</b> 分钟</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:8px;">';
+  ENG_BOOKS.forEach(function(book){
+    var val = dayMap[book] || '';
+    html += '<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#F6F0FC;border-radius:8px;">';
+    html += '<span style="font-size:13px;font-weight:600;min-width:120px;flex-shrink:0;">' + esc(book) + '</span>';
+    html += '<input type="number" min="0" max="600" placeholder="分钟" value="' + val + '" style="width:60px;padding:5px 8px;border:1px solid #D0B8E8;border-radius:6px;font-size:13px;text-align:center;background:#fff;" onchange="setEngBackfillTime(\'' + key + '\',\'' + esc(book) + '\',this.value,\'' + date + '\')">';
+    html += '<span style="font-size:12px;color:#9C27B0;">分</span>';
+    if (val) html += '<span style="font-size:16px;color:#4CAF50;">&#10003;</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  var area = document.getElementById('engBackfillArea_'+key);
+  if (area) area.innerHTML = html;
+}
+function setEngBackfillTime(key, book, val, date) {
+  var d = getEng(key);
+  var minutes = parseInt(val) || 0;
+  var rec = d.records.find(function(r){return r.date === date;});
+  if (!rec) {
+    rec = {date: date, items: []};
+    d.records.push(rec);
+  }
+  var idx = rec.items.findIndex(function(it){return it.name === book;});
+  if (minutes > 0) {
+    if (idx >= 0) rec.items[idx].minutes = minutes;
+    else rec.items.push({name: book, minutes: minutes});
+  } else {
+    if (idx >= 0) rec.items.splice(idx, 1);
+  }
+  if (rec.items.length === 0) {
+    d.records = d.records.filter(function(r){return r.date !== date;});
+  }
+  saveEng(key, d);
+  // 刷新补填区域显示
+  loadBackfillDate(key);
+  // 如果是今天，也刷新主页面
+  if (date === todayStr()) render();
+}
 function setEngBookTime(key, book, val) {
   const d = getEng(key);
   const today = todayStr();
