@@ -1266,6 +1266,104 @@ function renderBanzhima(pageKey, pageTitle) {
   <div class="tip-box">📝 每学完一张题卡，勾选"已学"并点"+"记次数。顶部填写今天总时长即可。</div>
   `;
 
+  // ===== 月度统计 =====
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonth = now.getMonth(); // 0-11
+  const monthStr = curYear + '-' + String(curMonth+1).padStart(2,'0');
+  const daysInMonth = new Date(curYear, curMonth+1, 0).getDate();
+
+  // 收集本月每天的数据
+  let monthDays = [];
+  let monthTotalMin = 0;
+  let monthActiveDays = 0;
+  let monthChecks = 0; // 本月打卡节数
+  // 用日期key前缀匹配本月所有的勾选（checks没有日期信息，所以这里采用"当前统计"
+  // = 总完成数，结合每日时长来呈现更准确的信息；用户要求按天细分，所以下方
+  // 用每个日期的 time 字段作为"是否当天有学习"的判断依据）
+
+  // 找到本月第一天对应的星期（0=周日, 1=周一...）
+  const firstWeekday = new Date(curYear, curMonth, 1).getDay();
+
+  // 用空格子补齐前面的占位
+  for (let i = 0; i < firstWeekday; i++) {
+    monthDays.push({ day: '', dateStr: '', minutes: 0, isPlaceholder: true });
+  }
+
+  for (let day=1; day<=daysInMonth; day++) {
+    const dateStr = curYear + '-' + String(curMonth+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+    const timeKey = dateStr+'_'+pageKey+'_total';
+    const minutes = parseInt(d.times[timeKey]) || 0;
+    if (minutes > 0) {
+      monthTotalMin += minutes;
+      monthActiveDays++;
+    }
+    monthDays.push({ day, dateStr, minutes });
+  }
+  // 补齐末尾空格，使最后一行对齐
+  const totalCells = monthDays.length;
+  const remain = totalCells % 7;
+  if (remain !== 0) {
+    for (let i = 0; i < 7 - remain; i++) {
+      monthDays.push({ day: '', dateStr: '', minutes: 0, isPlaceholder: true });
+    }
+  }
+  monthChecks = doneSections;
+
+  html += `
+  <div class="card" style="border-top:4px solid #7C4DFF;">
+    <div class="section-title">📊 ${curMonth+1}月统计</div>
+    <div style="display:flex;gap:16px;margin-bottom:14px;">
+      <div style="flex:1;text-align:center;background:#F3E5F5;border-radius:10px;padding:10px;">
+        <div style="font-size:24px;font-weight:800;color:#7C4DFF;">${monthTotalMin}</div>
+        <div style="font-size:12px;color:var(--text-mid);">本月总时长(分)</div>
+      </div>
+      <div style="flex:1;text-align:center;background:#E8F5E9;border-radius:10px;padding:10px;">
+        <div style="font-size:24px;font-weight:800;color:#2E7D32;">${monthActiveDays}</div>
+        <div style="font-size:12px;color:var(--text-mid);">学习天数</div>
+      </div>
+      <div style="flex:1;text-align:center;background:#FFF3E0;border-radius:10px;padding:10px;">
+        <div style="font-size:24px;font-weight:800;color:#E65100;">${doneSections}</div>
+        <div style="font-size:12px;color:var(--text-mid);">已打卡节数</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;">
+      <div style="text-align:center;font-size:10px;color:var(--text-light);">日</div>
+      <div style="text-align:center;font-size:10px;color:var(--text-light);">一</div>
+      <div style="text-align:center;font-size:10px;color:var(--text-light);">二</div>
+      <div style="text-align:center;font-size:10px;color:var(--text-light);">三</div>
+      <div style="text-align:center;font-size:10px;color:var(--text-light);">四</div>
+      <div style="text-align:center;font-size:10px;color:var(--text-light);">五</div>
+      <div style="text-align:center;font-size:10px;color:var(--text-light);">六</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">
+      ${monthDays.map((md, i) => {
+        if (md.isPlaceholder) {
+          return '<div style="aspect-ratio:1;background:transparent;"></div>';
+        }
+        const isToday = md.dateStr === today;
+        let bg = '#F5F5F5';
+        let textColor = '#BDBDBD';
+        let label = '';
+        if (md.minutes > 0) {
+          bg = '#CE93D8';
+          textColor = '#fff';
+          label = '<span style="font-size:9px;">'+md.minutes+'</span>';
+        }
+        if (isToday) {
+          bg = md.minutes > 0 ? '#7C4DFF' : '#FF9800';
+          textColor = '#fff';
+        }
+        return '<div style="aspect-ratio:1;background:'+bg+';border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:'+textColor+';font-size:11px;font-weight:600;'+(isToday?'border:2px solid #FF9800;':'')+'"><span>'+md.day+'</span>'+label+'</div>';
+      }).join('')}
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text-light);display:flex;gap:12px;">
+      <span>🟣 有学习</span>
+      <span>🟠 今天</span>
+      <span>⚪ 未学</span>
+    </div>
+  </div>`;
+
   theme.groups.forEach(grp => {
     // 统计该分组的完成数
     let grpDone = 0;
@@ -1322,14 +1420,56 @@ function setMathTotalTime(pageKey, val) {
 /* ============================================================
    英语模块
 ============================================================ */
-// 英语常规二 / 常规三 固定书名列表
-const ENG_BOOKS = [
-  "牛津树1", "W-play", "词汇妙趣国", "SuperhammyC",
-  "培生幼儿预备级2", "Wow english4-5", "Muzzy 7-12", "亲子共读（其它）"
+// ===== 英语 常规二 / 常规三：可排序、可自定义的书目列表 =====
+// 每套常规独立保存一份配置 dm_eng_{key}_cfg，结构: { order: [书名,...] }
+// order 里按用户拖动后的顺序存放所有有名字的书目（内置 + 已命名的自定义）。
+const ENG_DEFAULT_BOOKS = [
+  "牛津树1", "W-play", "词汇妙趣屋", "SuperhammyC",
+  "培生幼儿预备级2", "Wow english4-5", "Muzzy 7-12", "Hello Andy 4",
+  "牛津树2", "斑马思维机(英语)", "亲子共读（其它）"
 ];
+const ENG_EMPTY_SLOTS = 1; // 底部预留给用户自行命名的空位数量
+
+function getEngCfg(key) {
+  let cfg = Store.get('eng_'+key+'_cfg', null);
+  if (!cfg) {
+    // 首次：把旧固定书单初始化进配置
+    cfg = { order: ENG_DEFAULT_BOOKS.slice() };
+    Store.set('eng_'+key+'_cfg', cfg);
+  }
+  // 兜底：若 order 为空则回填默认
+  if (!Array.isArray(cfg.order) || cfg.order.length === 0) {
+    cfg.order = ENG_DEFAULT_BOOKS.slice();
+    Store.set('eng_'+key+'_cfg', cfg);
+  }
+  return cfg;
+}
+function saveEngCfg(key, cfg) { Store.set('eng_'+key+'_cfg', cfg); }
+// 返回当前页书单里有名字的、需要展示为可排序行的书目
+function getEngBookList(key) {
+  return getEngCfg(key).order;
+}
+
+// 历史改名迁移：把 records 里旧名“词汇妙趣国”合并为“词汇妙趣屋”，
+// 并把首次访问时书单里的旧名也替换（幂等）。
+function migrateEngNames(key) {
+  const d = getEng(key);
+  const ALIAS = { "词汇妙趣国": "词汇妙趣屋" };
+  let changed = false;
+  d.records.forEach(r => {
+    r.items.forEach(it => {
+      if (ALIAS[it.name]) { it.name = ALIAS[it.name]; changed = true; }
+    });
+  });
+  if (changed) saveEng(key, d);
+  const cfg = getEngCfg(key);
+  cfg.order = cfg.order.map(n => ALIAS[n] || n);
+  saveEngCfg(key, cfg);
+}
 
 function renderEng(key, title) {
-  const d = getEng(key);
+  migrateEngNames(key); // 历史改名合并 + 首次初始化书单配置（须先执行）
+  const d = getEng(key); // 迁移后再读取，保证书名一致
   const totalMin = d.records.reduce((s,r) => s + r.items.reduce((ss,it)=>ss+it.minutes,0), 0);
   const totalH = (totalMin/60).toFixed(1);
   const goal = d.goalHours;
@@ -1365,21 +1505,41 @@ function renderEng(key, title) {
 
   <div class="card">
     <div class="section-title">📝 今日记录 · 共 <b style="color:#7B1FA2;">${todayMin}</b> 分钟</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">`;
+    <div style="font-size:11px;color:var(--text-light);margin-bottom:8px;">☰ 长按右侧把手可拖动排序，自动保存顺序</div>
+    <div id="engTodayList_${key}" class="eng-today-list" style="display:flex;flex-direction:column;gap:8px;">`;
 
-  ENG_BOOKS.forEach((book, i) => {
+  // 有序命名行（内置 + 已命名的自定义），从当前顺序渲染
+  const engBooks = getEngBookList(key); // migrateEngNames 已保证无旧名
+  engBooks.forEach((book) => {
     const val = todayMap[book] || '';
     html += `
-      <div class="eng-book-row" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#FAF5FF;border-radius:10px;">
-        <span style="font-size:15px;font-weight:600;min-width:140px;flex-shrink:0;">📖 ${esc(book)}</span>
-        <input type="number" class="eng-book-min" data-key="${key}" data-book="${esc(book)}"
-          min="0" max="600" placeholder="分钟" value="${val}"
-          style="width:80px;padding:6px 10px;border:1px solid #D0B8E8;border-radius:8px;font-size:14px;text-align:center;background:#fff;"
+      <div class="eng-book-row eng-drag" data-engkey="${key}" data-engbook="${esc(book)}"
+        style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#FAF5FF;border-radius:10px;border:1px solid transparent;">
+        <span class="eng-grip" title="按住拖动排序" style="cursor:grab;color:#C39BD3;font-size:14px;flex-shrink:0;padding:0 2px;touch-action:none;">☰</span>
+        <span class="eng-name" data-name="${esc(book)}" title="点击书名可改名"
+          style="flex:1;min-width:0;font-size:14px;font-weight:600;color:#5E35B1;line-height:1.35;cursor:text;overflow-wrap:anywhere;">${esc(book)}</span>
+        <input type="number" class="eng-book-min" min="0" max="600" value="${val}"
+          data-engbook="${esc(book)}"
+          style="width:48px;padding:5px 4px;border:1px solid #D0B8E8;border-radius:8px;font-size:14px;text-align:center;background:#fff;flex-shrink:0;"
           oninput="setEngBookTime('${key}','${esc(book)}',this.value)">
-        <span style="font-size:13px;color:#9C27B0;">分钟</span>
-        ${val ? `<span style="font-size:18px;color:#4CAF50;">✓</span>` : ''}
+        <span style="font-size:10px;color:#9C27B0;flex-shrink:0;">分</span>
+        <span class="eng-ok" style="width:16px;text-align:center;flex-shrink:0;font-size:14px;color:#4CAF50;">${val ? '✓' : ''}</span>
+        <span onclick="engDeleteRow('${key}','${esc(book)}')" title="删除此行" style="cursor:pointer;color:#E57373;font-size:13px;flex-shrink:0;padding:0 2px;">✕</span>
       </div>`;
   });
+
+  // ${ENG_EMPTY_SLOTS} 个自定义空位（可自行填书名）
+  for (let s = 1; s <= ENG_EMPTY_SLOTS; s++) {
+    html += `
+      <div class="eng-book-row eng-custom-slot" data-engkey="${key}"
+        style="display:flex;align-items:center;gap:6px;padding:5px 10px;background:#FBF0FF;border:1px dashed #E1BEE7;border-radius:10px;">
+        <span style="color:#BA68C8;font-size:13px;flex-shrink:0;">＋</span>
+        <input type="text" class="eng-custom-name" placeholder="填一本新的书名，回车添加"
+          style="flex:1;min-width:0;padding:6px 10px;border:1px solid #E1BEE7;border-radius:8px;font-size:13px;background:#fff;"
+          onkeydown="if(event.key==='Enter'){engAddCustom(this)}"
+          onblur="engAddCustom(this)">
+      </div>`;
+  }
 
   html += `
     </div>
@@ -1494,6 +1654,140 @@ function renderEng(key, title) {
 function afterEng(key) {
   // 默认加载今天到补填区域
   loadBackfillDate(key);
+  // 初始化今日书单的交互（点击改名 + 拖动排序）
+  setTimeout(function(){ initEngInteractions(key); }, 50);
+}
+
+// ===== 今日书单交互：改名 / 添加自定义 / 删除 / 长按拖动排序 =====
+function engRenameInput(key, nameSpan, oldName) {
+  var current = nameSpan.textContent.trim();
+  var inp = document.createElement('input');
+  inp.type = 'text';
+  inp.value = current;
+  inp.style.cssText = 'flex:1;font-size:14px;font-weight:600;color:#5E35B1;border:1px solid #CE93D8;border-radius:6px;padding:4px 8px;background:#fff;';
+  nameSpan.replaceWith(inp);
+  inp.focus();
+  inp.select();
+  var done = function(){
+    var newName = inp.value.trim();
+    if (newName && newName !== current) {
+      engRename(key, oldName, newName);
+    } else {
+      render(); // 恢复原样
+    }
+  };
+  inp.addEventListener('blur', done);
+  inp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ inp.blur(); } if(e.key==='Escape'){ inp.value=current; inp.blur(); } });
+}
+
+function engRename(key, oldName, newName) {
+  var cfg = getEngCfg(key);
+  var idx = cfg.order.indexOf(oldName);
+  if (idx >= 0) cfg.order[idx] = newName; else cfg.order.push(newName);
+  saveEngCfg(key, cfg);
+  // 历史 records 里同名的也一起改名，避免分家
+  var d = getEng(key);
+  d.records.forEach(function(r){ r.items.forEach(function(it){ if(it.name===oldName) it.name=newName; }); });
+  saveEng(key, d);
+  render();
+}
+
+function engDeleteRow(key, book) {
+  if (!confirm('确定从今日记录中删除“' + book + '”这一行吗？（历史记录里的数据仍会保留）')) return;
+  var cfg = getEngCfg(key);
+  cfg.order = cfg.order.filter(function(n){ return n !== book; });
+  saveEngCfg(key, cfg);
+  render();
+}
+
+function engAddCustom(inpEl) {
+  var name = inpEl.value.trim();
+  if (!name) return;
+  var row = inpEl.closest('.eng-book-row');
+  var key = row ? row.getAttribute('data-engkey') : 'eng2';
+  if (!key) key = 'eng2';
+  var cfg = getEngCfg(key);
+  if (cfg.order.indexOf(name) >= 0) { alert('书目“' + name + '”已存在，无需重复添加。'); return; }
+  cfg.order.push(name);
+  saveEngCfg(key, cfg);
+  // 读取同槽分钟输入，若有值则记到今天
+  var minInput = row ? row.querySelector('.eng-custom-min') : null;
+  if (minInput && minInput.value) {
+    setEngBookTime(key, name, minInput.value);
+  }
+  render();
+}
+
+function initEngInteractions(key) {
+  var list = document.getElementById('engTodayList_' + key);
+  if (!list) return;
+
+  // —— 点击书名改名 ——
+  list.querySelectorAll('.eng-name').forEach(function(sp){
+    if (sp._bound) return; sp._bound = true;
+    sp.addEventListener('click', function(){
+      var row = sp.closest('.eng-book-row');
+      var book = row ? row.getAttribute('data-engbook') : sp.getAttribute('data-name');
+      engRenameInput(key, sp, book);
+    });
+  });
+
+  // —— 长按/按住 ☰ 把手拖动排序（自动保存） ——
+  var dragging = null, dragKey = null, startOrder = null;
+  var ROWS = function(){ return Array.prototype.slice.call(list.querySelectorAll('.eng-book-row.eng-drag')); };
+
+  list.addEventListener('pointerdown', function(e){
+    var grip = e.target.closest('.eng-grip');
+    if (!grip) return;
+    var row = grip.closest('.eng-book-row.eng-drag');
+    if (!row) return;
+    e.preventDefault();
+    dragging = row;
+    dragKey = row.getAttribute('data-engkey');
+    startOrder = ROWS().map(function(r){ return r.getAttribute('data-engbook'); }).join('\u0001');
+    row.style.background = '#EDE0FF';
+    row.style.border = '1px solid #7E57C2';
+    row.style.opacity = '0.85';
+    if (row.setPointerCapture) { try { row.setPointerCapture(e.pointerId); } catch(err){} }
+  });
+  list.addEventListener('pointermove', function(e){
+    if (!dragging) return;
+    e.preventDefault();
+    var rows = ROWS();
+    var y = e.clientY;
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      if (r === dragging) continue;
+      var rect = r.getBoundingClientRect();
+      var mid = rect.top + rect.height / 2;
+      if (y < mid) {
+        if (r !== dragging.nextElementSibling) list.insertBefore(dragging, r);
+        break;
+      }
+      if (i === rows.length - 1) list.insertBefore(dragging, r.nextSibling);
+    }
+  });
+  var endDrag = function(){
+    if (!dragging) return;
+    var theKey = dragKey || key;
+    // 恢复样式
+    dragging.style.background = '';
+    dragging.style.border = '';
+    dragging.style.opacity = '';
+    var endOrder = ROWS().map(function(r){ return r.getAttribute('data-engbook'); }).join('\u0001');
+    var cfg = getEngCfg(theKey);
+    dragging = null;
+    dragKey = null;
+    // 顺序确实变化才保存并刷新
+    if (startOrder !== null && endOrder !== startOrder) {
+      cfg.order = endOrder.split('\u0001');
+      saveEngCfg(theKey, cfg);
+      render();
+    }
+    startOrder = null;
+  };
+  list.addEventListener('pointerup', endDrag);
+  list.addEventListener('pointercancel', endDrag);
 }
 function loadBackfillDate(key) {
   var dateInput = document.getElementById('engBackfillDate_'+key);
@@ -1507,7 +1801,7 @@ function loadBackfillDate(key) {
 
   var html = '<div style="font-size:13px;color:var(--text-mid);margin-bottom:8px;">' + date + ' 共 <b style="color:#7B1FA2;">' + dayMin + '</b> 分钟</div>';
   html += '<div style="display:flex;flex-direction:column;gap:8px;">';
-  ENG_BOOKS.forEach(function(book){
+  getEngBookList(key).forEach(function(book){
     var val = dayMap[book] || '';
     html += '<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:#F6F0FC;border-radius:8px;">';
     html += '<span style="font-size:13px;font-weight:600;min-width:120px;flex-shrink:0;">' + esc(book) + '</span>';
